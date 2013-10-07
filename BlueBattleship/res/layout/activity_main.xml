@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/act"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Attiva Bluetooth" />
+
+    <Button
+        android:id="@+id/deact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disattiva Bluetooth" />
+
+    <Button
+        android:id="@+id/ricerca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ricerca" />
+
+    <EditText
+        android:id="@+id/edit1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
