@@ -27,8 +27,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// Gongolo!
-
+// Chi era il nano sempre incazzato?
+// Brontolo
+ 
 public class Main_Blue_Battleship extends Activity {
 	public final int REQUEST_ENABLE_BT=1;
 //	private static final UUID BBUUID=UUID.fromString("BlueBattleship");
