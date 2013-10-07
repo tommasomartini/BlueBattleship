@@ -27,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// Chi era il nano sempre incazzato?
+// Gongolo!
 
 public class Main_Blue_Battleship extends Activity {
 	public final int REQUEST_ENABLE_BT=1;
