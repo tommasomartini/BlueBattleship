@@ -2,20 +2,13 @@ package com.et.bluebattleship;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 public class Campo extends Activity {
 
@@ -23,26 +16,25 @@ public class Campo extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_campo);
+		LinearLayout principale=(LinearLayout)findViewById(R.id.principale);
 		
-		GridView grid = (GridView)findViewById(R.id.grid);
-		grid.setNumColumns(10);
-		MyAdapter adapter = new MyAdapter(this);
-		BaseAdapter bb = new BaseAdapter();
-		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        Button b = (Button)inflater.inflate(R.layout.cas, null);
-		Button c=new Button(this);
-
-		//adapter.(b);
-		adapter.add(c);
-
-		c.setText("ciao");
-		grid.setAdapter(adapter);
-		grid.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View v, int pos, long id){
-				(Toast.makeText(getApplicationContext(), "cliccato #"+id+" in posizione "+pos, Toast.LENGTH_LONG)).show();
+		Button[][] Matrix=new Button[3][3];
+		for(int i=0;i<3;i++){
+			LinearLayout madre=(LinearLayout)principale.getChildAt(i);
+			for(int j=0;j<3;j++){
+				Matrix[i][j]=(Button)madre.getChildAt(j);
 			}
-		});
+		}
+		
+		for(int i=0;i<3;i++){
+			
+			for(int j=0;j<3;j++){
+				
+				Matrix[i][j].setText(""+i+j);
+			}
+		}
+
+		
 		
 		
 		
