@@ -21,9 +21,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-// Chi era il nano sempre incazzato?
-// Brontolo
-
 public class Main_Blue_Battleship extends Activity {
 
 	private BluetoothAdapter bluetoothAdapter;
@@ -47,11 +44,23 @@ public class Main_Blue_Battleship extends Activity {
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 		if (bluetoothAdapter != null) { // bluetooth supported
+			
+			final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+				public void onReceive(Context context, Intent intent) {
+					String action = intent.getAction();
 
-			bluetoothDevices = new Vector<BluetoothDevice>();
-			deviceAdapter = new DeviceAdapter(this);
+					if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+						BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+						bluetoothDevices.add(device);
+						refreshBluetoothDevices();
+					}
+				}
+			};
+
+//			bluetoothDevices = new Vector<BluetoothDevice>();
+//			deviceAdapter = new DeviceAdapter(this);
 			lvDevices = (ListView)findViewById(R.id.lvDevices);
-			lvDevices.setAdapter(deviceAdapter);
+//			lvDevices.setAdapter(deviceAdapter);
 
 			btActBT = (Button)findViewById(R.id.btActBT);
 			btDeactBT = (Button)findViewById(R.id.btDeactBT);
@@ -91,8 +100,6 @@ public class Main_Blue_Battleship extends Activity {
 					bluetoothAdapter.disable();
 					btActBT.setEnabled(true);
 					btDeactBT.setEnabled(false);
-					//					bluetoothDevices = new Vector<BluetoothDevice>();
-					//					refreshBluetoothDevices();
 				}
 			});
 
@@ -100,20 +107,10 @@ public class Main_Blue_Battleship extends Activity {
 				@Override
 				public void onClick(View v){
 
-					//					bluetoothDevices = new Vector<BluetoothDevice>();
-					//					refreshBluetoothDevices();
+					bluetoothDevices = new Vector<BluetoothDevice>();
+					deviceAdapter = new DeviceAdapter(Main_Blue_Battleship.this);
+					lvDevices.setAdapter(deviceAdapter);
 
-					final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-						public void onReceive(Context context, Intent intent) {
-							String action = intent.getAction();
-
-							if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-								BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-								bluetoothDevices.add(device);
-								refreshBluetoothDevices();
-							}
-						}
-					};
 					IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 					registerReceiver(mReceiver, filter);
 					bluetoothAdapter.startDiscovery();
