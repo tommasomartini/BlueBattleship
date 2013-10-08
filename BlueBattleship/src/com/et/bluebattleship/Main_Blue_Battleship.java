@@ -2,14 +2,9 @@ package com.et.bluebattleship;
 
 
 
-import java.io.IOException;
-import java.util.UUID;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -42,6 +37,20 @@ public class Main_Blue_Battleship extends Activity {
         setContentView(R.layout.activity_main);
         
         ed = (EditText)findViewById(R.id.edit1);
+        
+       //vado al campo
+        Button Campo=(Button)findViewById(R.id.startCampo);
+        Campo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				runCampo();
+				
+				
+				
+				
+			}
+		});
         
         
         
@@ -119,6 +128,11 @@ public class Main_Blue_Battleship extends Activity {
     }
 
     
+    public void runCampo(){
+    	Intent intent = new Intent(this, Campo.class);
+    	startActivity(intent);
+    }
+    
     public void saveDevice(BluetoothDevice dev){
     	SQLHelper myDB=new SQLHelper(this);
     	SQLiteDatabase write=myDB.getWritableDatabase();
@@ -133,6 +147,8 @@ public class Main_Blue_Battleship extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+        
+        
     }
     
     

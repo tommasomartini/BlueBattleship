@@ -24,6 +24,12 @@
         android:layout_height="wrap_content"
         android:text="Ricerca" />
 
+    <Button
+        android:id="@+id/startCampo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vai al Campo" />
+
     <EditText
         android:id="@+id/edit1"
         android:layout_width="match_parent"
@@ -34,7 +40,7 @@
     </EditText>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/vvv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
