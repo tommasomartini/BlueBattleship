@@ -19,32 +19,40 @@ import android.widget.ToggleButton;
 
 public class Campo extends Activity {
 	public int lunghezzaNave;
+	//private List<OggettiUtili> gestisciGrid;
+	private boolean[] pres;
+	private ToggleButton orientazione;
+	GridView grid; 
+	private MyAdapter adapter;
 	//Drawable imm=getResources().getDrawable(R.drawable.ic_launcher);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_campo);
-		//LinearLayout principale=(LinearLayout)findViewById(R.id.principale);
+		grid = (GridView)findViewById(R.id.grid);
+		adapter = new MyAdapter(this);
+		//gestisciGrid=new Vector<OggettiUtili>();
+		pres=new boolean[100];
 		
-		
-		GridView grid = (GridView)findViewById(R.id.grid);
-		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-		MyAdapter adapter = new MyAdapter(this,inflater);
 		grid.setAdapter(adapter);
-		
+		orientazione=(ToggleButton)findViewById(R.id.toggleButton2);
 		grid.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+				try{
 				TextView v =(TextView)findViewById(R.id.text);
 				v.setText("posizione "+position+" id= "+id);
 				switch(lunghezzaNave){
 				case 1:
-					((TextView)view).setText("*");
+					pres[position]=true;
+					adapter.notifyDataSetChanged();
 					break;
 				case 2:
-					((TextView)view).setText("*");
-					setta(++position);
+					pres[position]=true;
+					if(!orientazione.isChecked()) pres[++position]=true;
+					else pres[position-10]=true;
+					adapter.notifyDataSetChanged();
 					break;
 				case 3:
 					break;
@@ -53,6 +61,11 @@ public class Campo extends Activity {
 				case 5:
 					break;
 				}
+				}catch(Exception e){
+					(Toast.makeText(getApplicationContext(), "Non puoi mettere la nave li", Toast.LENGTH_SHORT)).show();
+			}
+			
+				
 			}
 		});
 		
@@ -65,9 +78,11 @@ public class Campo extends Activity {
 				lunghezzaNave=2;
 			}
 		});
-	}
-	public void setta(int i){
 		
+		
+	}
+	private void refresh() {
+		adapter.notifyDataSetChanged();
 	}
 	
 
@@ -77,52 +92,59 @@ public class Campo extends Activity {
 		getMenuInflater().inflate(R.menu.campo, menu);
 		return true;
 	}
+	
+	
+	 class MyAdapter extends BaseAdapter {
+		 
+			private Context context;
+			public String pr;
+			public LayoutInflater ff;
+			private int cont=0;
+
+			public MyAdapter(Context context) {
+				super();
+				this.context = context;
+				
+			}
+
+			
+			@Override
+			public int getCount() {
+				return pres.length;
+			}
+
+			@Override
+			public Object getItem(int position) {
+				return pres[position];
+			}
+
+			@Override
+			public long getItemId(int position) {
+				return 0;
+			}
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+		       TextView a=new TextView(context);
+		       if(pres[position]) a.setText("*");
+		       else a.setText("-");
+				return a;
+			}
+			
+		}
+	 
+	 class OggettiUtili{
+		 public int pos;
+		 public boolean pres;
+		 public OggettiUtili(){
+			 pres=false;
+		 }
+	 }
+			
 
 }
 
 	
 
- class MyAdapter extends BaseAdapter {
 
-	private Context context;
-	public String pr;
-	public LayoutInflater ff;
-	//private Button imm;
-	private int[] button=new int[100];
-	private int cont=0;
-
-	public MyAdapter(Context context, LayoutInflater ff) {
-		this.context = context;
-		this.ff=ff;
-	}
-
-	
-	@Override
-	public int getCount() {
-		return button.length;
-	}
-
-	@Override
-	public Object getItem(int position) {
-		return button[position];
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return ((Integer)position).hashCode();
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		
-		
-        TextView a = (TextView)ff.inflate(R.layout.text, null);
-		
-		return a;
-	}
-	
-	
-
-}
-	
 

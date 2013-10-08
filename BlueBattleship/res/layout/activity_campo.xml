@@ -12,10 +12,20 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ToggleButton"
+        android:textOff="Orizzontale"
+        android:textOn="Verticale" />
+
+    <ToggleButton
         android:id="@+id/toggleButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ToggleButton" />
+        android:text="Nave"
+        android:textOff="NaveOFF"
+        android:textOn="NaveON" />
 
     <GridView
         android:id="@+id/grid"

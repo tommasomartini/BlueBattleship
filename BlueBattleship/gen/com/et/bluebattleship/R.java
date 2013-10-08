@@ -228,14 +228,14 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f040015;
-        public static final int action_settings=0x7f04001d;
+        public static final int LinearLayout1=0x7f040016;
+        public static final int action_settings=0x7f04001e;
         public static final int alignBounds=0x7f040002;
         public static final int alignMargins=0x7f040003;
         public static final int bottom=0x7f040005;
-        public static final int btActBT=0x7f040016;
-        public static final int btDeactBT=0x7f040017;
-        public static final int btSearchDevices=0x7f040018;
+        public static final int btActBT=0x7f040017;
+        public static final int btDeactBT=0x7f040018;
+        public static final int btSearchDevices=0x7f040019;
         public static final int center=0x7f04000c;
         public static final int center_horizontal=0x7f04000a;
         public static final int center_vertical=0x7f040008;
@@ -245,19 +245,20 @@ containing a value of this type.
         public static final int fill=0x7f04000d;
         public static final int fill_horizontal=0x7f04000b;
         public static final int fill_vertical=0x7f040009;
-        public static final int grid=0x7f040014;
+        public static final int grid=0x7f040015;
         public static final int horizontal=0x7f040000;
         public static final int left=0x7f040006;
-        public static final int lvDevices=0x7f04001b;
+        public static final int lvDevices=0x7f04001c;
         public static final int right=0x7f040007;
         public static final int start=0x7f040010;
-        public static final int startCampo=0x7f040019;
-        public static final int testo=0x7f04001c;
+        public static final int startCampo=0x7f04001a;
+        public static final int testo=0x7f04001d;
         public static final int text=0x7f040012;
-        public static final int toggleButton1=0x7f040013;
+        public static final int toggleButton1=0x7f040014;
+        public static final int toggleButton2=0x7f040013;
         public static final int top=0x7f040004;
         public static final int vertical=0x7f040001;
-        public static final int vvv2=0x7f04001a;
+        public static final int vvv2=0x7f04001b;
     }
     public static final class layout {
         public static final int activity_campo=0x7f030000;
