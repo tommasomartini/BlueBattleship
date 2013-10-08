@@ -1,16 +1,20 @@
 package com.et.bluebattleship;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
 
 public class Campo extends Activity {
@@ -22,12 +26,13 @@ public class Campo extends Activity {
 		
 		GridView grid = (GridView)findViewById(R.id.grid);
 		grid.setNumColumns(10);
-		ArrayAdapter<Button> adapter = new ArrayAdapter<Button>(this,R.layout.activity_campo,R.id.vvv2);
+		MyAdapter adapter = new MyAdapter(this);
+		BaseAdapter bb = new BaseAdapter();
 		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         Button b = (Button)inflater.inflate(R.layout.cas, null);
 		Button c=new Button(this);
 
-		adapter.add(b);
+		//adapter.(b);
 		adapter.add(c);
 
 		c.setText("ciao");
@@ -53,3 +58,47 @@ public class Campo extends Activity {
 	}
 
 }
+
+ class MyAdapter extends BaseAdapter {
+
+	private Context context;
+
+	private Button[] button;
+	private int cont=0;
+
+	public MyAdapter(Context context) {
+		this.context = context;
+	}
+
+	
+	@Override
+	public int getCount() {
+		return button.length;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return button[position];
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return button[position].hashCode();
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		Button button;
+		if (convertView == null) {
+			button = new Button(context);
+			button.setText("ciao");
+		} else {
+			button = (Button) convertView;
+		}
+		button.setText("boh");
+		return button;
+	}
+
+}
+	
+
