@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class Campo extends Activity {
-	
+	public int lunghezzaNave;
 	//Drawable imm=getResources().getDrawable(R.drawable.ic_launcher);
 
 	@Override
@@ -23,24 +27,7 @@ public class Campo extends Activity {
 		setContentView(R.layout.activity_campo);
 		//LinearLayout principale=(LinearLayout)findViewById(R.id.principale);
 		
-		/*
-		Button[][] Matrix=new Button[3][3];
-		for(int i=0;i<3;i++){
-			LinearLayout madre=(LinearLayout)principale.getChildAt(i);
-			for(int j=0;j<3;j++){
-				Matrix[i][j]=(Button)madre.getChildAt(j);
-			}
-		}
 		
-		for(int i=0;i<3;i++){
-			
-			for(int j=0;j<3;j++){
-				
-				Matrix[i][j].setText(""+i+j);
-			}
-		}
-
-		*/
 		GridView grid = (GridView)findViewById(R.id.grid);
 		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 		MyAdapter adapter = new MyAdapter(this,inflater);
@@ -51,9 +38,38 @@ public class Campo extends Activity {
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 				TextView v =(TextView)findViewById(R.id.text);
 				v.setText("posizione "+position+" id= "+id);
+				switch(lunghezzaNave){
+				case 1:
+					((TextView)view).setText("*");
+					break;
+				case 2:
+					((TextView)view).setText("*");
+					setta(++position);
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					break;
+				}
+			}
+		});
+		
+		ToggleButton nave=(ToggleButton)findViewById(R.id.toggleButton1);
+		nave.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				(Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT)).show();
+				lunghezzaNave=2;
 			}
 		});
 	}
+	public void setta(int i){
+		
+	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
