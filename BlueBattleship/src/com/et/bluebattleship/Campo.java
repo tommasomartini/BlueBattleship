@@ -21,7 +21,11 @@ public class Campo extends Activity {
 	public int lunghezzaNave;
 	//private List<OggettiUtili> gestisciGrid;
 	private boolean[] pres;
+	private boolean naveAttiva;
 	private ToggleButton orientazione;
+	private ToggleButton nave_1;
+	private ToggleButton nave_2;
+	private ToggleButton nave_3;
 	GridView grid; 
 	private MyAdapter adapter;
 	//Drawable imm=getResources().getDrawable(R.drawable.ic_launcher);
@@ -34,32 +38,51 @@ public class Campo extends Activity {
 		adapter = new MyAdapter(this);
 		//gestisciGrid=new Vector<OggettiUtili>();
 		pres=new boolean[100];
-		
+		naveAttiva=false;
 		grid.setAdapter(adapter);
 		orientazione=(ToggleButton)findViewById(R.id.toggleButton2);
+		
 		grid.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 				try{
 				TextView v =(TextView)findViewById(R.id.text);
 				v.setText("posizione "+position+" id= "+id);
+				if(naveAttiva){
 				switch(lunghezzaNave){
 				case 1:
+					
 					pres[position]=true;
 					adapter.notifyDataSetChanged();
 					break;
 				case 2:
+					
+					
 					pres[position]=true;
 					if(!orientazione.isChecked()) pres[++position]=true;
 					else pres[position-10]=true;
 					adapter.notifyDataSetChanged();
+					
 					break;
 				case 3:
+					
+					pres[position]=true;
+					if(!orientazione.isChecked()) {
+						pres[1+position]=true;
+						pres[position-1]=true;
+					}
+					else {
+						pres[position-10]=true;
+						pres[position+10]=true;
+					}
+					
+					adapter.notifyDataSetChanged();
 					break;
 				case 4:
 					break;
 				case 5:
 					break;
+				}
 				}
 				}catch(Exception e){
 					(Toast.makeText(getApplicationContext(), "Non puoi mettere la nave li", Toast.LENGTH_SHORT)).show();
@@ -69,15 +92,54 @@ public class Campo extends Activity {
 			}
 		});
 		
-		ToggleButton nave=(ToggleButton)findViewById(R.id.toggleButton1);
-		nave.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		nave_1=(ToggleButton)findViewById(R.id.toggleButton1);
+		nave_1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				(Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT)).show();
-				lunghezzaNave=2;
+				if(isChecked){
+				if(!naveAttiva){
+				lunghezzaNave=1;
+				naveAttiva=true;
+				}
+				}else{
+					naveAttiva=false;
+				}
 			}
 		});
+		
+		nave_2=(ToggleButton)findViewById(R.id.toggleButton3);
+		nave_2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+				if(!naveAttiva){
+				lunghezzaNave=2;
+				naveAttiva=true;
+				}
+				}else{
+					naveAttiva=false;
+				}
+			}
+		});
+		
+		nave_3=(ToggleButton)findViewById(R.id.toggleButton4);
+		nave_3.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+				if(!naveAttiva){
+				lunghezzaNave=3;
+				naveAttiva=true;
+				}
+				}else{
+					naveAttiva=false;
+				}
+			}
+		});
+		
 		
 		
 	}
