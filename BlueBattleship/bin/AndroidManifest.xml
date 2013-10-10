@@ -29,6 +29,10 @@
             android:name="com.et.bluebattleship.Campo"
             android:label="@string/title_activity_campo" >
         </activity>
+        <activity
+            android:name="com.et.bluebattleship.Match"
+            android:label="@string/title_activity_match" >
+        </activity>
     </application>
 
 </manifest>
