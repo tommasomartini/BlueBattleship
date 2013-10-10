@@ -2,93 +2,132 @@ package com.et.bluebattleship;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class Campo extends Activity {
 	public int lunghezzaNave;
-	//private List<OggettiUtili> gestisciGrid;
+	public Context context;
+	public Resources res;
+	public Drawable drawable; 
+	public Drawable drawable2;
 	private boolean[] pres;
 	private boolean naveAttiva;
-	private ToggleButton orientazione;
+	private ToggleButton orizzontale;
 	private ToggleButton nave_1;
 	private ToggleButton nave_2;
 	private ToggleButton nave_3;
-	GridView grid; 
+	public LayoutInflater layoutInflater;
+	public GridView grid; 
+	public Nave naveDaUno;
+	public Nave naveDaDue;
+	public Nave naveDaTre;
+	public Nave nave;
+	public TextView nomeNave;
+	public Button eliminaNave;
+	public LinearLayout layout;
 	private MyAdapter adapter;
-	//Drawable imm=getResources().getDrawable(R.drawable.ic_launcher);
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_campo);
 		grid = (GridView)findViewById(R.id.grid);
-		adapter = new MyAdapter(this);
+		layout=(LinearLayout)findViewById(R.id.principale);
+		layoutInflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+		
+		adapter = new MyAdapter(this,layoutInflater);
 		//gestisciGrid=new Vector<OggettiUtili>();
 		pres=new boolean[100];
 		naveAttiva=false;
 		grid.setAdapter(adapter);
-		orientazione=(ToggleButton)findViewById(R.id.toggleButton2);
+		orizzontale=(ToggleButton)findViewById(R.id.toggleButton2);
 		
 		grid.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-				try{
-				TextView v =(TextView)findViewById(R.id.text);
-				v.setText("posizione "+position+" id= "+id);
-				if(naveAttiva){
-				switch(lunghezzaNave){
-				case 1:
-					
-					pres[position]=true;
-					adapter.notifyDataSetChanged();
-					break;
-				case 2:
-					
-					
-					pres[position]=true;
-					if(!orientazione.isChecked()) pres[++position]=true;
-					else pres[position-10]=true;
-					adapter.notifyDataSetChanged();
-					
-					break;
-				case 3:
-					
-					pres[position]=true;
-					if(!orientazione.isChecked()) {
-						pres[1+position]=true;
-						pres[position-1]=true;
-					}
-					else {
-						pres[position-10]=true;
-						pres[position+10]=true;
-					}
-					
-					adapter.notifyDataSetChanged();
-					break;
-				case 4:
-					break;
-				case 5:
-					break;
-				}
-				}
-				}catch(Exception e){
-					(Toast.makeText(getApplicationContext(), "Non puoi mettere la nave li", Toast.LENGTH_SHORT)).show();
-			}
-			
 				
+				if(naveAttiva){
+					switch(lunghezzaNave){
+					case 1:
+						final LinearLayout fill1=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
+						naveDaUno=new Nave(1);
+						nave_1.setClickable(false);
+						naveDaUno.settaNave(position);
+						//(Toast.makeText(getApplicationContext(), "Nave messa in " + naveDaUno.getPosizioni(), Toast.LENGTH_SHORT)).show();
+						layout.addView(fill1, 1);
+						nomeNave=(TextView)fill1.getChildAt(0);
+						nomeNave.setText(naveDaUno.getPosizioni());
+						Button eliminaNave1=(Button)fill1.getChildAt(1);
+						eliminaNave1.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								naveDaUno.elimina();
+								layout.removeViewInLayout(fill1);
+								nave_1.setClickable(true);
+							}
+						});
+						break;
+					case 2:
+						final LinearLayout fill2=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
+						naveDaDue=new Nave(2);
+						nave_2.setClickable(false);
+						naveDaDue.settaNave(position);
+						nomeNave=(TextView)fill2.getChildAt(0);
+						nomeNave.setText(naveDaDue.getPosizioni());
+						layout.addView(fill2, 1);
+						Button eliminaNave2=(Button)fill2.getChildAt(1);
+						eliminaNave2.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								naveDaDue.elimina();
+								layout.removeViewInLayout(fill2);
+								nave_2.setClickable(true);
+							}
+						});
+						break;
+					case 3:
+						final LinearLayout fill3=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
+						naveDaTre=new Nave(3);
+						nave_3.setClickable(false);
+						naveDaTre.settaNave(position);
+						nomeNave=(TextView)fill3.getChildAt(0);
+						nomeNave.setText(naveDaTre.getPosizioni());
+						layout.addView(fill3, 1);
+						Button eliminaNave3=(Button)fill3.getChildAt(1);
+						eliminaNave3.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								naveDaTre.elimina();
+								layout.removeViewInLayout(fill3);
+								nave_3.setClickable(true);
+							}
+						});
+						break;
+					}
+				}
 			}
 		});
 		
@@ -98,13 +137,16 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-				if(!naveAttiva){
-				lunghezzaNave=1;
-				naveAttiva=true;
+					nave_3.setClickable(false);
+					nave_2.setClickable(false);
+					naveAttiva=true;
+					lunghezzaNave=1;
+				}	else{
+					nave=null;
+					nave_3.setClickable(true);
+					nave_2.setClickable(true);
 				}
-				}else{
-					naveAttiva=false;
-				}
+				
 			}
 		});
 		
@@ -114,13 +156,17 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-				if(!naveAttiva){
-				lunghezzaNave=2;
-				naveAttiva=true;
+					nave_1.setClickable(false);
+					nave_3.setClickable(false);
+					
+					naveAttiva=true;
+					lunghezzaNave=2;
+				}	else{
+					nave=null;
+					nave_1.setClickable(true);
+					nave_3.setClickable(true);
 				}
-				}else{
-					naveAttiva=false;
-				}
+				
 			}
 		});
 		
@@ -130,30 +176,49 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-				if(!naveAttiva){
-				lunghezzaNave=3;
-				naveAttiva=true;
+					nave_1.setClickable(false);
+					nave_2.setClickable(false);
+					naveAttiva=true;
+					lunghezzaNave=3;
+				}	else{
+					nave=null;
+					nave_1.setClickable(true);
+					nave_2.setClickable(true);
 				}
-				}else{
-					naveAttiva=false;
-				}
+				
+			}
+		});	
+		
+		
+		
+		Button GO = (Button)findViewById(R.id.button1);
+		//GO.setClickable(nave_1.isChecked() && nave_2.isChecked() && nave_3.isChecked());
+		GO.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				runMatch();
 			}
 		});
 		
-		
-		
-	}
-	private void refresh() {
-		adapter.notifyDataSetChanged();
 	}
 	
-
+	
+	public void runMatch(){
+		Intent Match=new Intent(this, Match.class);
+		Match.putExtra("MiaGriglia",pres);
+		startActivity(Match);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		
 		getMenuInflater().inflate(R.menu.campo, menu);
 		return true;
 	}
+	
+	
+	
 	
 	
 	 class MyAdapter extends BaseAdapter {
@@ -163,9 +228,10 @@ public class Campo extends Activity {
 			public LayoutInflater ff;
 			private int cont=0;
 
-			public MyAdapter(Context context) {
+			public MyAdapter(Context context,LayoutInflater ff) {
 				super();
 				this.context = context;
+				this.ff=ff;
 				
 			}
 
@@ -182,31 +248,175 @@ public class Campo extends Activity {
 
 			@Override
 			public long getItemId(int position) {
-				return 0;
+				return position;
 			}
 
 			@Override
 			public View getView(int position, View convertView, ViewGroup parent) {
+				res=getResources();
+				drawable = res.getDrawable(R.drawable.grey);
+				drawable2 = res.getDrawable(R.drawable.blue);
+				
+				ImageView v = (ImageView)ff.inflate(R.layout.image, null);
+				
 		       TextView a=new TextView(context);
-		       if(pres[position]) a.setText("*");
-		       else a.setText("-");
-				return a;
+		       if(pres[position]) v.setImageDrawable(drawable);
+		       else v.setImageDrawable(drawable2);
+				return v;
 			}
 			
 		}
 	 
-	 class OggettiUtili{
-		 public int pos;
-		 public boolean pres;
-		 public OggettiUtili(){
-			 pres=false;
+	 class Nave{
+		 public int grandezza;
+		 public int[] posizioni;
+		 public Nave(int gra){
+			grandezza=gra;
+		 }
+		 
+		 public boolean checkFree(int position,int grandezza){
+			 if(pres[position]) return false;
+			 switch(grandezza){
+			 
+			 case 2:
+				 if(!orizzontale.isChecked()){
+					 if(pres[position+1]) return false;
+				 }else{
+					 if(pres[position-10]) return false;
+				 }
+				 break;
+			 case 3:
+				 if(!orizzontale.isChecked()){
+					 if(pres[position+1] || pres[position-1]) return false;
+				 }else{
+					 if(pres[position-10] || pres[position+10]) return false;
+				 }
+				 break;
+			 }
+			 return true;
+		 }
+		 
+		 public void aggiungiPulsanteNave(LayoutInflater layoutInflater,LinearLayout layoutPrincipale){
+				LinearLayout layoutDaInserire=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
+				layoutPrincipale.addView(layoutDaInserire);
+				}
+		 
+		 
+		 public String getPosizioni(){
+			 String ret="";
+			 for(int i=0;i<grandezza;i++){
+				 ret=ret + posizioni[i] + " ";
+			 }
+			 
+			 return ret;
+		 }
+		 
+		 public int[] intGetPosizioni(){
+			 return posizioni;
+		 }
+		 
+		 public void elimina(){
+			 for(int i=0;i<grandezza;i++){
+				 pres[posizioni[i]]=false;
+			 }
+			 adapter.notifyDataSetChanged();
+			 
+		 }
+		 
+		 
+		 
+		 public void settaNave(int position){
+			 
+			 posizioni = new int[grandezza];
+			 
+			 
+			 try{
+				 switch(grandezza){
+					case 1:
+						if(checkFree(position,grandezza)){
+						pres[position]=true;
+						posizioni[0]=position;
+						adapter.notifyDataSetChanged();
+						nave_1.setChecked(false);
+						}
+						break;
+					case 2:
+						if(!orizzontale.isChecked()) {
+							if((position/10)==((position+1)/10) && checkFree(position, grandezza)){
+							pres[position]=true;
+							posizioni[0]=position;
+							pres[position+1]=true;
+							posizioni[1]=position+1;
+							}else {
+								throw new Exception();
+							}
+						}
+						else {
+							if(checkFree(position, grandezza)){
+							try{
+							pres[position-10]=true;
+							posizioni[0]=position-10;
+							}catch(Exception e){break;}
+							
+							pres[position]=true;
+							posizioni[1]=position;
+							}else throw new Exception();
+						}
+						nave_2.setChecked(false);
+						adapter.notifyDataSetChanged();
+						
+						break;
+					case 3:
+						if(!orizzontale.isChecked()) {
+							if((position/10)==((position+1)/10) && (position/10)==((position-1)/10) && checkFree(position, grandezza)){
+								posizioni[0]=position;
+								pres[position]=true;
+								posizioni[1]=position+1;
+							pres[1+position]=true;
+							posizioni[2]=position-1;
+							pres[position-1]=true;
+							}else {
+								throw new Exception();
+							}
+						}
+						else {
+							
+							if(checkFree(position, grandezza)){
+							try{
+							pres[position-10]=true;
+							posizioni[2]=position-10;
+							}catch(Exception e ){
+								break;
+							}
+							try{
+							pres[position+10]=true;
+							posizioni[1]=position+10;
+							}
+							catch(Exception e){
+								
+								pres[position-10]=false;
+								posizioni[2]=-1;
+								break;}
+							pres[position]=true;
+							posizioni[0]=position;
+							}else throw new Exception();
+							
+							}
+						
+						nave_3.setChecked(false);
+						adapter.notifyDataSetChanged();
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					}
+				 }catch(Exception e){(Toast.makeText(getApplicationContext(), "Non puoi mettere la nave li", Toast.LENGTH_SHORT)).show();}
 		 }
 	 }
-			
-
-}
-
+	 
 	
-
+	 
+}
 
 

@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/principale"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,47 +14,56 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nave"
-            android:textOff="Nave1=OFF"
-            android:textOn="Nave1=ON" />
+            android:textOff="1"
+            android:textOn="1" />
 
         <ToggleButton
             android:id="@+id/toggleButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ToggleButton"
-            android:textOff="Nave2=OFF"
-            android:textOn="Nave2=ON" />
+            android:textOff="2"
+            android:textOn="2" />
 
         <ToggleButton
             android:id="@+id/toggleButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ToggleButton"
-            android:textOff="Nave3=OFF"
-            android:textOn="Nave3=ON" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+            android:textOff="3"
+            android:textOn="3" />
 
         <ToggleButton
             android:id="@+id/toggleButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ToggleButton"
-            android:textOff="Orizzontale"
-            android:textOn="Verticale" />
+            android:textOff="-"
+            android:textOn="|" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GO!" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        
+        
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
     </LinearLayout>
 
     <GridView
         android:id="@+id/grid"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
+        android:horizontalSpacing="2dp"
         android:numColumns="10"
-        android:stretchMode="columnWidth"
+        android:verticalSpacing="2dp"
         android:visibility="visible" >
 
     </GridView>

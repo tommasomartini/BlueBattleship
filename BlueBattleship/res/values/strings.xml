@@ -8,5 +8,6 @@
     <string name="bt_act_bluetooth">Attiva bluetooth</string>
     <string name="bt_deact_bluetooth">Disattiva bluetooth</string>
     <string name="bt_search_bt_devices">Ricerca dispositivi</string>
+    <string name="title_activity_match">Match</string>
 
 </resources>
