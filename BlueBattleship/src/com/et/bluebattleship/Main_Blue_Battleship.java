@@ -2,27 +2,43 @@ package com.et.bluebattleship;
 
 
 
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.Vector;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Main_Blue_Battleship extends Activity {
+	
+	private static final long UUID_MOST_SIG_BIT = 1;
+	private static final long UUID_LEAST_SIG_BIT = 1;
+	private static final String BLUETOOTH_APP_NAME = "blue_battleship";
+//	private static final UUID BLUETOOTH_UUID = new UUID(UUID_MOST_SIG_BIT, UUID_LEAST_SIG_BIT);
+	private static final UUID BLUETOOTH_UUID = UUID.randomUUID();
 
+	private ServerThread serverThread;
+	
 	private BluetoothAdapter bluetoothAdapter;
 
 	private Button btActBT;
@@ -45,6 +61,9 @@ public class Main_Blue_Battleship extends Activity {
 
 		if (bluetoothAdapter != null) { // bluetooth supported
 			
+			serverThread = new ServerThread();
+//			serverThread.run();
+			
 			final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 				public void onReceive(Context context, Intent intent) {
 					String action = intent.getAction();
@@ -60,6 +79,17 @@ public class Main_Blue_Battleship extends Activity {
 //			bluetoothDevices = new Vector<BluetoothDevice>();
 //			deviceAdapter = new DeviceAdapter(this);
 			lvDevices = (ListView)findViewById(R.id.lvDevices);
+			lvDevices.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
+					BluetoothDevice bluetoothDevice = bluetoothDevices.get(position);
+					
+					ClientThread clientThread = new ClientThread(bluetoothDevice);
+					clientThread.run();
+				}
+				
+			});
 //			lvDevices.setAdapter(deviceAdapter);
 
 			btActBT = (Button)findViewById(R.id.btActBT);
@@ -122,6 +152,10 @@ public class Main_Blue_Battleship extends Activity {
 	private void refreshBluetoothDevices() {
 		deviceAdapter.notifyDataSetChanged();
 	}
+	
+	private void manageConnectedSocket(BluetoothSocket socket) {
+		Toast.makeText(this, "Connesso!", Toast.LENGTH_SHORT).show();
+	}
 
 	public void runCampo(){
 		Intent intent = new Intent(this, Campo.class);
@@ -158,6 +192,87 @@ public class Main_Blue_Battleship extends Activity {
 			tvDevice.setText(bluetoothDevices.get(position).getName());
 			return tvDevice;
 		}
+	}
+	
+	private class ServerThread extends Thread {
+		
+	    private final BluetoothServerSocket mmServerSocket;
+	 
+	    public ServerThread() {
+	    	
+	        BluetoothServerSocket tmp = null;
+	        try {
+	            tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord(BLUETOOTH_APP_NAME, BLUETOOTH_UUID);
+	        } catch (IOException e) {
+	        	Log.i("BBS", "errore dove sai tu!");
+	        }
+	        mmServerSocket = tmp;
+	    }
+	 
+	    public void run() {
+	    	Toast.makeText(Main_Blue_Battleship.this, "fino a qui!", Toast.LENGTH_SHORT).show();
+	        BluetoothSocket socket = null;
+//	        while (true) {
+	            try {
+	                socket = mmServerSocket.accept();
+	            } catch (IOException e) {
+//                break;
+	            }
+//	            if (socket != null) {
+//	                manageConnectedSocket(socket);
+//	                try {
+//						mmServerSocket.close();
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//	                break;
+//	            }
+//	        }
+	    }
+	 
+	    public void cancel() {
+	        try {
+	            mmServerSocket.close();
+	        } catch (IOException e) { }
+	    }
+	}
+	
+	private class ClientThread extends Thread {
+	    private final BluetoothSocket mmSocket;
+	    private final BluetoothDevice mmDevice;
+	 
+	    public ClientThread(BluetoothDevice device) {
+	        BluetoothSocket tmp = null;
+	        mmDevice = device;
+	 
+	        try {
+	            tmp = device.createRfcommSocketToServiceRecord(BLUETOOTH_UUID);
+	        } catch (IOException e) { }
+	        mmSocket = tmp;
+	    }
+	 
+	    public void run() {
+	        bluetoothAdapter.cancelDiscovery();
+	 
+	        try {
+	            mmSocket.connect();
+	        } catch (IOException connectException) {
+	            try {
+	                mmSocket.close();
+	            } catch (IOException closeException) { }
+	            return;
+	        }
+	 
+	        manageConnectedSocket(mmSocket);
+	    }
+	 
+	    /** Will cancel an in-progress connection, and close the socket */
+	    public void cancel() {
+	        try {
+	            mmSocket.close();
+	        } catch (IOException e) { }
+	    }
 	}
 }
 
