@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/principale"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:baselineAligned="true"
+    android:measureWithLargestChild="true"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -60,9 +62,13 @@
     <GridView
         android:id="@+id/grid"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:columnWidth="@dimen/activity_horizontal_margin"
         android:horizontalSpacing="2dp"
         android:numColumns="10"
+        android:stretchMode="columnWidth"
         android:verticalSpacing="2dp"
         android:visibility="visible" >
 

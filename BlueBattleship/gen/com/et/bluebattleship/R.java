@@ -226,11 +226,16 @@ containing a value of this type.
     public static final class drawable {
         public static final int battleship_icon=0x7f020000;
         public static final int blue=0x7f020001;
-        public static final int grey=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int iconcina=0x7f020004;
+        public static final int blue2=0x7f020002;
+        public static final int blue3=0x7f020003;
+        public static final int blue4=0x7f020004;
+        public static final int blue5=0x7f020005;
+        public static final int grey=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int iconcina=0x7f020008;
     }
     public static final class id {
+        public static final int GridView1=0x7f040020;
         public static final int LinearLayout1=0x7f040019;
         public static final int action_settings=0x7f040023;
         public static final int alignBounds=0x7f040002;
@@ -250,7 +255,6 @@ containing a value of this type.
         public static final int fill_horizontal=0x7f04000b;
         public static final int fill_vertical=0x7f040009;
         public static final int grid=0x7f040018;
-        public static final int gridView1=0x7f040020;
         public static final int horizontal=0x7f040000;
         public static final int left=0x7f040006;
         public static final int lvDevices=0x7f04001f;

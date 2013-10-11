@@ -1,11 +1,15 @@
 package com.et.bluebattleship;
 
+import com.et.bluebattleship.Campo.SquareImageView;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -24,16 +28,19 @@ public class Match extends Activity {
 	public GridView grid;
 	private MyAdapter adapter;
 	public LayoutInflater layoutInflater;
+	DisplayMetrics metrics;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_match);
 		Intent intent=getIntent();
+		metrics = new DisplayMetrics();
+		 getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		statoCampo=intent.getBooleanArrayExtra("MiaGriglia");
-		//if(statoCampo[10]) (Toast.makeText(getApplicationContext(), "Non puoi mettere la nave li", Toast.LENGTH_SHORT)).show();
 		layoutInflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-		adapter=new MyAdapter(this,layoutInflater);
-		grid = (GridView)findViewById(R.id.gridView1);
+		adapter=new MyAdapter(this,layoutInflater,metrics.widthPixels);
+		grid = (GridView)findViewById(R.id.GridView1);
 		grid.setAdapter(adapter);
 	}
 
@@ -45,21 +52,59 @@ public class Match extends Activity {
 	}
 	
 	
-	
+	 public class SquareImageView extends ImageView
+	 {
+		 public int width;
+	     public SquareImageView(final Context context,int width)
+	     {
+	         super(context);
+	         this.width=width;
+	     }
+
+	     public SquareImageView(final Context context, final AttributeSet attrs)
+	     {
+	         super(context, attrs);
+	     }
+
+	     public SquareImageView(final Context context, final AttributeSet attrs, final int defStyle)
+	     {
+	         super(context, attrs, defStyle);
+	     }
+
+
+	     @Override
+	     public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	     {
+	         //final int width = getDefaultSize(getSuggestedMinimumWidth(),widthMeasureSpec);
+	         setMeasuredDimension(width, width);
+	     }
+
+	     @Override
+	     protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh)
+	     {
+	         super.onSizeChanged(w, w, oldw, oldh);
+	     }
+	 }
 	
 	 class MyAdapter extends BaseAdapter {
 		 
-			private Context context;
+			public Context context;
 			public String pr;
+			 private int mItemHeight = 0;
+			 private int pixelW;
 			public LayoutInflater ff;
-			private int cont=0;
+			private GridView.LayoutParams mImageViewLayoutParams;
 
-			public MyAdapter(Context context,LayoutInflater ff) {
+			public MyAdapter(Context context,LayoutInflater ff,int pixel) {
 				super();
+				
+				pixelW=(pixel/10)-(9/2);
 				this.context = context;
 				this.ff=ff;
 				
 			}
+			
+			
 
 			
 			@Override
@@ -78,17 +123,21 @@ public class Match extends Activity {
 			}
 
 			@Override
+			
 			public View getView(int position, View convertView, ViewGroup parent) {
 				res=getResources();
 				drawable = res.getDrawable(R.drawable.grey);
-				drawable2 = res.getDrawable(R.drawable.blue);
+				//ImageView v=(ImageView)ff.inflate(R.layout.image, null);
+				//v.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				
-				ImageView v = (ImageView)ff.inflate(R.layout.image, null);
-				
-		       TextView a=new TextView(context);
-		       if(statoCampo[position]) v.setImageDrawable(drawable);
-		       else v.setImageDrawable(drawable2);
-				return v;
+				SquareImageView siv=new SquareImageView(context,pixelW);
+			
+            	
+				Drawable blue = getResources().getDrawable(R.drawable.blue);
+				Drawable grey = getResources().getDrawable(R.drawable.grey);
+		       if(statoCampo[position]) siv.setImageDrawable(grey);
+		       else siv.setImageDrawable(blue);
+				return siv;
 			}
 			
 		}

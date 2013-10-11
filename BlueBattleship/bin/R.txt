@@ -15,9 +15,14 @@ int dimen activity_vertical_margin 0x7f050002
 int dimen default_gap 0x7f050000
 int drawable battleship_icon 0x7f020000
 int drawable blue 0x7f020001
-int drawable grey 0x7f020002
-int drawable ic_launcher 0x7f020003
-int drawable iconcina 0x7f020004
+int drawable blue2 0x7f020002
+int drawable blue3 0x7f020003
+int drawable blue4 0x7f020004
+int drawable blue5 0x7f020005
+int drawable grey 0x7f020006
+int drawable ic_launcher 0x7f020007
+int drawable iconcina 0x7f020008
+int id GridView1 0x7f040020
 int id LinearLayout1 0x7f040019
 int id action_settings 0x7f040023
 int id alignBounds 0x7f040002
@@ -37,7 +42,6 @@ int id fill 0x7f04000d
 int id fill_horizontal 0x7f04000b
 int id fill_vertical 0x7f040009
 int id grid 0x7f040018
-int id gridView1 0x7f040020
 int id horizontal 0x7f040000
 int id left 0x7f040006
 int id lvDevices 0x7f04001f

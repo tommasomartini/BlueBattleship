@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -28,8 +31,8 @@ public class Campo extends Activity {
 	public int lunghezzaNave;
 	public Context context;
 	public Resources res;
+	public Display display;
 	public Drawable drawable; 
-	public Drawable drawable2;
 	private boolean[] pres;
 	private boolean naveAttiva;
 	private ToggleButton orizzontale;
@@ -46,6 +49,8 @@ public class Campo extends Activity {
 	public Button eliminaNave;
 	public LinearLayout layout;
 	private MyAdapter adapter;
+	DisplayMetrics metrics;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +59,14 @@ public class Campo extends Activity {
 		grid = (GridView)findViewById(R.id.grid);
 		layout=(LinearLayout)findViewById(R.id.principale);
 		layoutInflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-		
-		adapter = new MyAdapter(this,layoutInflater);
+		metrics = new DisplayMetrics();
+		 getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		 
+		 
+		adapter = new MyAdapter(this,layoutInflater,metrics.widthPixels);
 		//gestisciGrid=new Vector<OggettiUtili>();
+		
+		//adapter.setItemHeight();
 		pres=new boolean[100];
 		naveAttiva=false;
 		grid.setAdapter(adapter);
@@ -71,6 +81,7 @@ public class Campo extends Activity {
 					case 1:
 						final LinearLayout fill1=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaUno=new Nave(1);
+						naveAttiva=false;
 						nave_1.setClickable(false);
 						naveDaUno.settaNave(position);
 						//(Toast.makeText(getApplicationContext(), "Nave messa in " + naveDaUno.getPosizioni(), Toast.LENGTH_SHORT)).show();
@@ -91,6 +102,7 @@ public class Campo extends Activity {
 					case 2:
 						final LinearLayout fill2=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaDue=new Nave(2);
+						naveAttiva=false;
 						nave_2.setClickable(false);
 						naveDaDue.settaNave(position);
 						nomeNave=(TextView)fill2.getChildAt(0);
@@ -110,6 +122,7 @@ public class Campo extends Activity {
 					case 3:
 						final LinearLayout fill3=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaTre=new Nave(3);
+						naveAttiva=false;
 						nave_3.setClickable(false);
 						naveDaTre.settaNave(position);
 						nomeNave=(TextView)fill3.getChildAt(0);
@@ -142,7 +155,7 @@ public class Campo extends Activity {
 					naveAttiva=true;
 					lunghezzaNave=1;
 				}	else{
-					nave=null;
+					naveAttiva=false;
 					nave_3.setClickable(true);
 					nave_2.setClickable(true);
 				}
@@ -162,7 +175,7 @@ public class Campo extends Activity {
 					naveAttiva=true;
 					lunghezzaNave=2;
 				}	else{
-					nave=null;
+					naveAttiva=false;
 					nave_1.setClickable(true);
 					nave_3.setClickable(true);
 				}
@@ -181,7 +194,7 @@ public class Campo extends Activity {
 					naveAttiva=true;
 					lunghezzaNave=3;
 				}	else{
-					nave=null;
+					naveAttiva=false;
 					nave_1.setClickable(true);
 					nave_2.setClickable(true);
 				}
@@ -223,17 +236,23 @@ public class Campo extends Activity {
 	
 	 class MyAdapter extends BaseAdapter {
 		 
-			private Context context;
+			public Context context;
 			public String pr;
+			 private int mItemHeight = 0;
+			 private int pixelW;
 			public LayoutInflater ff;
-			private int cont=0;
+			private GridView.LayoutParams mImageViewLayoutParams;
 
-			public MyAdapter(Context context,LayoutInflater ff) {
+			public MyAdapter(Context context,LayoutInflater ff,int pixel) {
 				super();
+				
+				pixelW=(pixel/10)-(9/2);
 				this.context = context;
 				this.ff=ff;
 				
 			}
+			
+			
 
 			
 			@Override
@@ -252,20 +271,60 @@ public class Campo extends Activity {
 			}
 
 			@Override
+			
 			public View getView(int position, View convertView, ViewGroup parent) {
 				res=getResources();
 				drawable = res.getDrawable(R.drawable.grey);
-				drawable2 = res.getDrawable(R.drawable.blue);
+				//ImageView v=(ImageView)ff.inflate(R.layout.image, null);
+				//v.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				
-				ImageView v = (ImageView)ff.inflate(R.layout.image, null);
-				
-		       TextView a=new TextView(context);
-		       if(pres[position]) v.setImageDrawable(drawable);
-		       else v.setImageDrawable(drawable2);
-				return v;
+				SquareImageView siv=new SquareImageView(context,pixelW);
+			
+               	
+				Drawable blue = getResources().getDrawable(R.drawable.blue);
+				Drawable grey = getResources().getDrawable(R.drawable.grey);
+		       if(pres[position]) siv.setImageDrawable(grey);
+		       else siv.setImageDrawable(blue);
+				return siv;
 			}
 			
 		}
+	 
+	 
+	 public class SquareImageView extends ImageView
+	 {
+		 public int width;
+	     public SquareImageView(final Context context,int width)
+	     {
+	         super(context);
+	         this.width=width;
+	     }
+
+	     public SquareImageView(final Context context, final AttributeSet attrs)
+	     {
+	         super(context, attrs);
+	     }
+
+	     public SquareImageView(final Context context, final AttributeSet attrs, final int defStyle)
+	     {
+	         super(context, attrs, defStyle);
+	     }
+
+
+	     @Override
+	     public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	     {
+	         //final int width = getDefaultSize(getSuggestedMinimumWidth(),widthMeasureSpec);
+	         setMeasuredDimension(width, width);
+	     }
+
+	     @Override
+	     protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh)
+	     {
+	         super.onSizeChanged(w, w, oldw, oldh);
+	     }
+	 }
+	 
 	 
 	 class Nave{
 		 public int grandezza;
