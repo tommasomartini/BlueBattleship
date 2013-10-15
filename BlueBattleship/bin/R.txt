@@ -19,9 +19,10 @@ int drawable blue2 0x7f020002
 int drawable blue3 0x7f020003
 int drawable blue4 0x7f020004
 int drawable blue5 0x7f020005
-int drawable grey 0x7f020006
-int drawable ic_launcher 0x7f020007
-int drawable iconcina 0x7f020008
+int drawable colpito 0x7f020006
+int drawable grey 0x7f020007
+int drawable ic_launcher 0x7f020008
+int drawable iconcina 0x7f020009
 int id GridView1 0x7f040020
 int id LinearLayout1 0x7f040019
 int id action_settings 0x7f040023
@@ -61,13 +62,17 @@ int id vvv2 0x7f04001e
 int layout activity_campo 0x7f030000
 int layout activity_main 0x7f030001
 int layout activity_match 0x7f030002
-int layout cas 0x7f030003
-int layout image 0x7f030004
-int layout layout_per_nave 0x7f030005
-int layout text 0x7f030006
+int layout activity_match__win 0x7f030003
+int layout activity_my__field 0x7f030004
+int layout cas 0x7f030005
+int layout image 0x7f030006
+int layout layout_per_nave 0x7f030007
+int layout text 0x7f030008
 int menu campo 0x7f080000
 int menu main 0x7f080001
 int menu match 0x7f080002
+int menu match__win 0x7f080003
+int menu my__field 0x7f080004
 int string action_settings 0x7f060001
 int string app_name 0x7f060000
 int string bt_act_bluetooth 0x7f060004
@@ -76,6 +81,8 @@ int string bt_search_bt_devices 0x7f060006
 int string hello_world 0x7f060002
 int string title_activity_campo 0x7f060003
 int string title_activity_match 0x7f060007
+int string title_activity_match__win 0x7f060008
+int string title_activity_my__field 0x7f060009
 int style AppBaseTheme 0x7f070000
 int style AppTheme 0x7f070001
 int[] styleable GridLayout { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006 }

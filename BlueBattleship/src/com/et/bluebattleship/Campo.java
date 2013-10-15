@@ -60,22 +60,15 @@ public class Campo extends Activity {
 		layout=(LinearLayout)findViewById(R.id.principale);
 		layoutInflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 		metrics = new DisplayMetrics();
-		 getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		 
-		 
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		adapter = new MyAdapter(this,layoutInflater,metrics.widthPixels);
-		//gestisciGrid=new Vector<OggettiUtili>();
-		
-		//adapter.setItemHeight();
 		pres=new boolean[100];
 		naveAttiva=false;
 		grid.setAdapter(adapter);
 		orizzontale=(ToggleButton)findViewById(R.id.toggleButton2);
-		
 		grid.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-				
 				if(naveAttiva){
 					switch(lunghezzaNave){
 					case 1:
@@ -84,13 +77,11 @@ public class Campo extends Activity {
 						naveAttiva=false;
 						nave_1.setClickable(false);
 						naveDaUno.settaNave(position);
-						//(Toast.makeText(getApplicationContext(), "Nave messa in " + naveDaUno.getPosizioni(), Toast.LENGTH_SHORT)).show();
 						layout.addView(fill1, 1);
 						nomeNave=(TextView)fill1.getChildAt(0);
 						nomeNave.setText(naveDaUno.getPosizioni());
 						Button eliminaNave1=(Button)fill1.getChildAt(1);
 						eliminaNave1.setOnClickListener(new OnClickListener() {
-							
 							@Override
 							public void onClick(View v) {
 								naveDaUno.elimina();
@@ -110,7 +101,6 @@ public class Campo extends Activity {
 						layout.addView(fill2, 1);
 						Button eliminaNave2=(Button)fill2.getChildAt(1);
 						eliminaNave2.setOnClickListener(new OnClickListener() {
-							
 							@Override
 							public void onClick(View v) {
 								naveDaDue.elimina();
@@ -130,7 +120,6 @@ public class Campo extends Activity {
 						layout.addView(fill3, 1);
 						Button eliminaNave3=(Button)fill3.getChildAt(1);
 						eliminaNave3.setOnClickListener(new OnClickListener() {
-							
 							@Override
 							public void onClick(View v) {
 								naveDaTre.elimina();
@@ -210,15 +199,17 @@ public class Campo extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				nave_1.setClickable(false);
+				nave_2.setClickable(false);
+				nave_3.setClickable(false);
 				runMatch();
 			}
 		});
-		
-	}
+		}
 	
 	
 	public void runMatch(){
-		Intent Match=new Intent(this, Match.class);
+		Intent Match=new Intent(this, Match_Enemy.class);
 		Match.putExtra("MiaGriglia",pres);
 		startActivity(Match);
 	}
@@ -238,22 +229,15 @@ public class Campo extends Activity {
 		 
 			public Context context;
 			public String pr;
-			 private int mItemHeight = 0;
-			 private int pixelW;
+			private int pixelW;
 			public LayoutInflater ff;
-			private GridView.LayoutParams mImageViewLayoutParams;
 
 			public MyAdapter(Context context,LayoutInflater ff,int pixel) {
 				super();
-				
 				pixelW=(pixel/10)-(9/2);
 				this.context = context;
 				this.ff=ff;
-				
 			}
-			
-			
-
 			
 			@Override
 			public int getCount() {
@@ -275,12 +259,7 @@ public class Campo extends Activity {
 			public View getView(int position, View convertView, ViewGroup parent) {
 				res=getResources();
 				drawable = res.getDrawable(R.drawable.grey);
-				//ImageView v=(ImageView)ff.inflate(R.layout.image, null);
-				//v.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				
 				SquareImageView siv=new SquareImageView(context,pixelW);
-			
-               	
 				Drawable blue = getResources().getDrawable(R.drawable.blue);
 				Drawable grey = getResources().getDrawable(R.drawable.grey);
 		       if(pres[position]) siv.setImageDrawable(grey);

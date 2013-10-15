@@ -9,5 +9,7 @@
     <string name="bt_deact_bluetooth">Disattiva bluetooth</string>
     <string name="bt_search_bt_devices">Ricerca dispositivi</string>
     <string name="title_activity_match">Match</string>
+    <string name="title_activity_match__win">Match_Win</string>
+    <string name="title_activity_my__field">My_Field</string>
 
 </resources>
