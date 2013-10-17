@@ -76,7 +76,6 @@ public class Campo extends Activity {
 				if(naveAttiva){
 					switch(lunghezzaNave){
 					case 1:
-						
 						final LinearLayout fill1=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaUno=new Nave(1);
 						naveAttiva=false;
@@ -92,7 +91,6 @@ public class Campo extends Activity {
 								naveDaUno.elimina();
 								layout.removeViewInLayout(fill1);
 								nave_1.setClickable(true);
-								naveAttiva_1=false;
 							}
 						});
 						
@@ -112,7 +110,6 @@ public class Campo extends Activity {
 							@Override
 							public void onClick(View v) {
 								naveDaDue.elimina();
-								naveAttiva_2=false;
 								layout.removeViewInLayout(fill2);
 								nave_2.setClickable(true);
 							}
@@ -134,7 +131,6 @@ public class Campo extends Activity {
 							@Override
 							public void onClick(View v) {
 								naveDaTre.elimina();
-								naveAttiva_3=false;
 								layout.removeViewInLayout(fill3);
 								nave_3.setClickable(true);
 							}
@@ -152,16 +148,10 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					//nave_3.setClickable(false);
-					//nave_2.setClickable(false);
 					naveAttiva=true;
-					//naveAttiva_1=true;
 					lunghezzaNave=1;
 				}	else{
 					naveAttiva=false;
-					//naveAttiva_1=false;
-					
-					
 				}
 				
 			}
@@ -173,15 +163,10 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					//nave_1.setClickable(false);
-					//nave_3.setClickable(false);
-					//naveAttiva_2=true;
 					naveAttiva=true;
 					lunghezzaNave=2;
 				}	else{
-					//naveAttiva_2=false;
 					naveAttiva=false;
-					
 				}
 				
 			}
@@ -193,14 +178,10 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					//nave_1.setClickable(false);
-					//nave_2.setClickable(false);
 					naveAttiva=true;
-					//naveAttiva_3=true;
 					lunghezzaNave=3;
 				}	else{
 					naveAttiva=false;
-					//naveAttiva_3=false;
 					
 				}
 				
@@ -214,12 +195,10 @@ public class Campo extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				nave_1.setClickable(false);
-				nave_2.setClickable(false);
-				nave_3.setClickable(false);
 				toolBox=ToolBox.getInstance();
 				toolBox.my_field=pres;
 				runMatch();
+				finish();
 			}
 		});
 		}
@@ -242,11 +221,7 @@ public class Campo extends Activity {
 		getMenuInflater().inflate(R.menu.campo, menu);
 		return true;
 	}
-	
-	
-	
-	
-	
+
 	 class MyAdapter extends BaseAdapter {
 		 
 			public Context context;
