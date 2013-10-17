@@ -1,6 +1,7 @@
 package com.et.bluebattleship;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -20,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class Match_Enemy extends Activity {
-	public boolean[] statoCampo;
+	public boolean[] naviPrese;
 	public boolean[] mancato;
 	public boolean[] campoAvversario;
 	public Resources res;
@@ -31,23 +32,18 @@ public class Match_Enemy extends Activity {
 	int n=0;
 	public LayoutInflater layoutInflater;
 	DisplayMetrics metrics;
+	public ToolBox toolBox;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_match);
-		Intent intent=getIntent();
-		
-		
-		campoAvversario=intent.getBooleanArrayExtra("MiaGriglia");
-		for(int i=0;i<100;i++) {
-			if(campoAvversario[i]) n++;
-		}
-		statoCampo=new boolean[100];
-		mancato=new boolean[100];
+		toolBox=ToolBox.getInstance();
+		naviPrese=toolBox.enemy_field;
+		mancato=toolBox.mancato_enemy;
+
 		metrics = new DisplayMetrics();
 		 getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		 
 		layoutInflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 		adapter=new MyAdapter(this,layoutInflater,metrics.widthPixels);
 		grid = (GridView)findViewById(R.id.GridView1);
@@ -56,8 +52,8 @@ public class Match_Enemy extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 				
-				if(campoAvversario[position]){
-					statoCampo[position]=true;
+				if(COLPISCI(position)){
+					naviPrese[position]=true;
 					adapter.notifyDataSetChanged();
 					Toast.makeText(getApplicationContext(), "COLPITO!", Toast.LENGTH_SHORT).show();
 					controllaCampo();
@@ -65,6 +61,7 @@ public class Match_Enemy extends Activity {
 					Toast.makeText(getApplicationContext(), "MANCATO!", Toast.LENGTH_SHORT).show();
 					mancato[position]=true;
 					adapter.notifyDataSetChanged();
+					runMyField();
 				}
 			}
 		});
@@ -72,13 +69,26 @@ public class Match_Enemy extends Activity {
 		
 	}
 	
+	public void runMyField(){
+		Intent intent=new Intent(this, My_Field.class);
+		toolBox.enemy_field=naviPrese;
+		toolBox.mancato_enemy=mancato;
+		startActivity(intent);
+		finish();
+	}
+	
+	public boolean COLPISCI(int posizione){
+		return toolBox.campoVirtuale[posizione];
+		//richiedi via bluetooth
+		//ritorna true o false
+		
+	}
 	
 	public void controllaCampo(){
-		n=n-1;
-		if(n==0) {
-			
+		
+		if(--toolBox.numero_navi==0) {
 			Intent Match=new Intent(this, Match_Win.class);
-			//Match.putExtra("MiaGriglia",pres);
+			//invia messaggio che hai vitno e lui ha perso (looser)
 			startActivity(Match);
 		}
 	}
@@ -139,12 +149,12 @@ public class Match_Enemy extends Activity {
 			
 			@Override
 			public int getCount() {
-				return statoCampo.length;
+				return naviPrese.length;
 			}
 
 			@Override
 			public Object getItem(int position) {
-				return statoCampo[position];
+				return naviPrese[position];
 			}
 
 			@Override
@@ -159,16 +169,19 @@ public class Match_Enemy extends Activity {
 				drawable = res.getDrawable(R.drawable.grey);
 				SquareImageView squareImageView=new SquareImageView(context,pixelW);
 				Drawable blue = getResources().getDrawable(R.drawable.blue);
-				Drawable grey = getResources().getDrawable(R.drawable.grey);
-				Drawable colpito = getResources().getDrawable(R.drawable.colpito);
-		       if(statoCampo[position]) squareImageView.setImageDrawable(grey);
+				Drawable burn = getResources().getDrawable(R.drawable.burn);
+				
+				Drawable mancato_imm = getResources().getDrawable(R.drawable.colpito);
+		       if(naviPrese[position]) squareImageView.setImageDrawable(burn);
 		       else {
-		    	   if(mancato[position])squareImageView.setImageDrawable(colpito);
+		    	   if(mancato[position])squareImageView.setImageDrawable(mancato_imm);
 		    	   else squareImageView.setImageDrawable(blue);
 		       }
 				return squareImageView;
 			}
 			
 		}
+	 
+	
 
 }

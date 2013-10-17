@@ -49,6 +49,7 @@ public class Campo extends Activity {
 	public Button eliminaNave;
 	public LinearLayout layout;
 	private MyAdapter adapter;
+	public ToolBox toolBox;
 	DisplayMetrics metrics;
 	
 	
@@ -193,8 +194,7 @@ public class Campo extends Activity {
 		
 		
 		
-		Button GO = (Button)findViewById(R.id.button1);
-		//GO.setClickable(nave_1.isChecked() && nave_2.isChecked() && nave_3.isChecked());
+		Button GO = (Button)findViewById(R.id.bu);
 		GO.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -202,6 +202,8 @@ public class Campo extends Activity {
 				nave_1.setClickable(false);
 				nave_2.setClickable(false);
 				nave_3.setClickable(false);
+				toolBox=ToolBox.getInstance();
+				toolBox.my_field=pres;
 				runMatch();
 			}
 		});
@@ -210,7 +212,12 @@ public class Campo extends Activity {
 	
 	public void runMatch(){
 		Intent Match=new Intent(this, Match_Enemy.class);
-		Match.putExtra("MiaGriglia",pres);
+		toolBox.enemy_field=new boolean[100];
+		toolBox.campoVirtuale=new boolean[100];
+		toolBox.colpite=new boolean[100];
+		toolBox.campoVirtuale[0]=true;
+		toolBox.my_field=pres;
+		toolBox.mancato_enemy=new boolean[100];
 		startActivity(Match);
 	}
 	
