@@ -51,6 +51,9 @@ public class Campo extends Activity {
 	private MyAdapter adapter;
 	public ToolBox toolBox;
 	DisplayMetrics metrics;
+	public boolean naveAttiva_1;
+	public boolean naveAttiva_2;
+	public boolean naveAttiva_3;
 	
 	
 	@Override
@@ -73,6 +76,7 @@ public class Campo extends Activity {
 				if(naveAttiva){
 					switch(lunghezzaNave){
 					case 1:
+						
 						final LinearLayout fill1=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaUno=new Nave(1);
 						naveAttiva=false;
@@ -88,10 +92,13 @@ public class Campo extends Activity {
 								naveDaUno.elimina();
 								layout.removeViewInLayout(fill1);
 								nave_1.setClickable(true);
+								naveAttiva_1=false;
 							}
 						});
+						
 						break;
 					case 2:
+						
 						final LinearLayout fill2=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaDue=new Nave(2);
 						naveAttiva=false;
@@ -105,12 +112,15 @@ public class Campo extends Activity {
 							@Override
 							public void onClick(View v) {
 								naveDaDue.elimina();
+								naveAttiva_2=false;
 								layout.removeViewInLayout(fill2);
 								nave_2.setClickable(true);
 							}
 						});
+						
 						break;
 					case 3:
+						
 						final LinearLayout fill3=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaTre=new Nave(3);
 						naveAttiva=false;
@@ -124,10 +134,12 @@ public class Campo extends Activity {
 							@Override
 							public void onClick(View v) {
 								naveDaTre.elimina();
+								naveAttiva_3=false;
 								layout.removeViewInLayout(fill3);
 								nave_3.setClickable(true);
 							}
 						});
+						
 						break;
 					}
 				}
@@ -140,14 +152,16 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					nave_3.setClickable(false);
-					nave_2.setClickable(false);
+					//nave_3.setClickable(false);
+					//nave_2.setClickable(false);
 					naveAttiva=true;
+					//naveAttiva_1=true;
 					lunghezzaNave=1;
 				}	else{
 					naveAttiva=false;
-					nave_3.setClickable(true);
-					nave_2.setClickable(true);
+					//naveAttiva_1=false;
+					
+					
 				}
 				
 			}
@@ -159,15 +173,15 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					nave_1.setClickable(false);
-					nave_3.setClickable(false);
-					
+					//nave_1.setClickable(false);
+					//nave_3.setClickable(false);
+					//naveAttiva_2=true;
 					naveAttiva=true;
 					lunghezzaNave=2;
 				}	else{
+					//naveAttiva_2=false;
 					naveAttiva=false;
-					nave_1.setClickable(true);
-					nave_3.setClickable(true);
+					
 				}
 				
 			}
@@ -179,14 +193,15 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					nave_1.setClickable(false);
-					nave_2.setClickable(false);
+					//nave_1.setClickable(false);
+					//nave_2.setClickable(false);
 					naveAttiva=true;
+					//naveAttiva_3=true;
 					lunghezzaNave=3;
 				}	else{
 					naveAttiva=false;
-					nave_1.setClickable(true);
-					nave_2.setClickable(true);
+					//naveAttiva_3=false;
+					
 				}
 				
 			}
