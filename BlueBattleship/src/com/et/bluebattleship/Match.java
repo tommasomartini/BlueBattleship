@@ -1,7 +1,5 @@
 package com.et.bluebattleship;
 
-import com.et.bluebattleship.Campo.SquareImageView;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class Match extends Activity {
 	public boolean[] statoCampo;

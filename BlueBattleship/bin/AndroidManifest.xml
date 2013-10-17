@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="10"
         android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -30,8 +30,16 @@
             android:label="@string/title_activity_campo" >
         </activity>
         <activity
-            android:name="com.et.bluebattleship.Match"
+            android:name="com.et.bluebattleship.Match_Enemy"
             android:label="@string/title_activity_match" >
+        </activity>
+        <activity
+            android:name="com.et.bluebattleship.Match_Win"
+            android:label="@string/title_activity_match__win" >
+        </activity>
+        <activity
+            android:name="com.et.bluebattleship.My_Field"
+            android:label="@string/title_activity_my__field" >
         </activity>
     </application>
 

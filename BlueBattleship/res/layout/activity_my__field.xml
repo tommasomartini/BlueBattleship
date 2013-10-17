@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".My_Field" >
+
+    <Button
+        android:id="@+id/but"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+    <GridView
+        android:id="@+id/g"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnWidth="@dimen/activity_horizontal_margin"
+        android:horizontalSpacing="2dp"
+        android:numColumns="10"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="2dp" >
+
+    </GridView>
+
+</LinearLayout>

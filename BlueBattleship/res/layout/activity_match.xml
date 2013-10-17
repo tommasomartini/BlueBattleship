@@ -3,6 +3,7 @@
     android:id="@+id/GridView1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:columnWidth="@dimen/activity_horizontal_margin"
     android:horizontalSpacing="2dp"
     android:numColumns="10"
     android:stretchMode="columnWidth"
