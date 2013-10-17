@@ -51,6 +51,9 @@ public class Campo extends Activity {
 	private MyAdapter adapter;
 	public ToolBox toolBox;
 	DisplayMetrics metrics;
+	public boolean naveAttiva_1;
+	public boolean naveAttiva_2;
+	public boolean naveAttiva_3;
 	
 	
 	@Override
@@ -90,8 +93,10 @@ public class Campo extends Activity {
 								nave_1.setClickable(true);
 							}
 						});
+						
 						break;
 					case 2:
+						
 						final LinearLayout fill2=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaDue=new Nave(2);
 						naveAttiva=false;
@@ -109,8 +114,10 @@ public class Campo extends Activity {
 								nave_2.setClickable(true);
 							}
 						});
+						
 						break;
 					case 3:
+						
 						final LinearLayout fill3=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaTre=new Nave(3);
 						naveAttiva=false;
@@ -128,6 +135,7 @@ public class Campo extends Activity {
 								nave_3.setClickable(true);
 							}
 						});
+						
 						break;
 					}
 				}
@@ -140,14 +148,10 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					nave_3.setClickable(false);
-					nave_2.setClickable(false);
 					naveAttiva=true;
 					lunghezzaNave=1;
 				}	else{
 					naveAttiva=false;
-					nave_3.setClickable(true);
-					nave_2.setClickable(true);
 				}
 				
 			}
@@ -159,15 +163,10 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					nave_1.setClickable(false);
-					nave_3.setClickable(false);
-					
 					naveAttiva=true;
 					lunghezzaNave=2;
 				}	else{
 					naveAttiva=false;
-					nave_1.setClickable(true);
-					nave_3.setClickable(true);
 				}
 				
 			}
@@ -179,14 +178,11 @@ public class Campo extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					nave_1.setClickable(false);
-					nave_2.setClickable(false);
 					naveAttiva=true;
 					lunghezzaNave=3;
 				}	else{
 					naveAttiva=false;
-					nave_1.setClickable(true);
-					nave_2.setClickable(true);
+					
 				}
 				
 			}
@@ -199,12 +195,10 @@ public class Campo extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				nave_1.setClickable(false);
-				nave_2.setClickable(false);
-				nave_3.setClickable(false);
 				toolBox=ToolBox.getInstance();
 				toolBox.my_field=pres;
 				runMatch();
+				finish();
 			}
 		});
 		}
@@ -227,11 +221,7 @@ public class Campo extends Activity {
 		getMenuInflater().inflate(R.menu.campo, menu);
 		return true;
 	}
-	
-	
-	
-	
-	
+
 	 class MyAdapter extends BaseAdapter {
 		 
 			public Context context;
