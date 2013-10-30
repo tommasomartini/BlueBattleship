@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -79,11 +80,19 @@ public class Match_Enemy extends Activity {
 	    // Member object for the chat services
 	    private BlueBattleshipService mChatService = null;
 		//
+	    private ServiceConnection serv;
+	    
+	    
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_match);
+		
+		
+		
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		toolBox=ToolBox.getInstance();
 		naviPrese=toolBox.enemy_field;
 		mancato=toolBox.mancato_enemy;
@@ -234,7 +243,8 @@ public class Match_Enemy extends Activity {
 	}
 	
 	public boolean COLPISCI(int posizione){
-		return toolBox.campoVirtuale[posizione];
+		return true;
+		//return toolBox.campoVirtuale[posizione];
 		//sendMessage(""+posizione);
 		
 		//ritorna true o false

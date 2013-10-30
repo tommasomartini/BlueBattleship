@@ -3,6 +3,7 @@ package com.et.bluebattleship;
 public class ToolBox {
 	
 	private static ToolBox me;
+	public boolean primo=false;
 	public boolean[] campoVirtuale;
 	public boolean[] my_field;
 	public boolean[] enemy_field;
@@ -10,6 +11,7 @@ public class ToolBox {
 	public boolean[] colpite;
 	public int nemicoVirtuale=0;
 	public int numero_navi=1;
+	public BlueBattleshipService mBlueBattleshipService;
 	
 	public static ToolBox getInstance(){
 		if (me==null) me=new ToolBox();

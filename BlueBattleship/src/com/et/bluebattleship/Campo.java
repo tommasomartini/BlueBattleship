@@ -206,13 +206,15 @@ public class Campo extends Activity {
 	
 	public void runMatch(){
 		Intent Match=new Intent(this, Match_Enemy.class);
+		Intent MyField=new Intent(this, My_Field.class);
 		toolBox.enemy_field=new boolean[100];
 		toolBox.campoVirtuale=new boolean[100];
 		toolBox.colpite=new boolean[100];
 		toolBox.campoVirtuale[0]=true;
 		toolBox.my_field=pres;
 		toolBox.mancato_enemy=new boolean[100];
-		startActivity(Match);
+		if(toolBox.primo) startActivity(Match);
+		else startActivity(MyField);
 	}
 	
 	@Override

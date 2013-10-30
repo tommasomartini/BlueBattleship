@@ -35,7 +35,7 @@ public class Main_Blue_Battleship extends Activity {
 	// Debugging
     private static final String TAG = "BlueBattleship";
     private static final boolean D = true;
-
+    private ToolBox toolBox;
     // Message types sent from the BlueBattleshipService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
@@ -85,6 +85,7 @@ public class Main_Blue_Battleship extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		toolBox=ToolBox.getInstance();
 		if (D) Log.i(TAG, "ON CREATE");
 		setContentView(R.layout.activity_main);
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -116,6 +117,7 @@ public class Main_Blue_Battleship extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 				BluetoothDevice bluetoothDevice = bluetoothDevices.get(position);
+				toolBox.primo=true;
 			}
 
 		});
