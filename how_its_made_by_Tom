@@ -1,0 +1,18 @@
+Main Activity
+
+OnCreate()
+creo il bluetooth adapter e mi assicuro che non sia null. Se non è null procedo e lancio il servizio BluetoothService.
+
+Creo qui il broadcast receiver per gestire il ritrovamento di un dispositivo bluetooth. Lo userò mooolto più avanti.
+
+Creo la lista dei device trovati dal bluetooth.
+
+Creo i tre pulsanti: abilita, disabilita e ricerca e li (dis)attivo a seconda se il bluetooth è attivo o meno.
+
+btAct -> ensureDiscoverbale(): metodo in cui lancio un intent per rendere il dispositivo "discoverable" per 300 secondi.
+
+btDeact -> cancello la "scopribilità" e spengo il bluetooth
+
+btSearch -> comincio a ricercare dispositivi
+
+
