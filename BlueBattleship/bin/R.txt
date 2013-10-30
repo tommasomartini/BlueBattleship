@@ -87,6 +87,9 @@ int string title_activity_campo 0x7f060003
 int string title_activity_match 0x7f060007
 int string title_activity_match__win 0x7f060008
 int string title_activity_my__field 0x7f060009
+int string title_connected_to 0x7f06000a
+int string title_connecting 0x7f06000b
+int string title_not_connected 0x7f06000c
 int style AppBaseTheme 0x7f070000
 int style AppTheme 0x7f070001
 int[] styleable GridLayout { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006 }

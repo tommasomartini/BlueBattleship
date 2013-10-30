@@ -2,6 +2,7 @@ package com.et.bluebattleship;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,10 +17,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 public class My_Field extends Activity {
 	public boolean[] colpito;
@@ -33,6 +38,8 @@ public class My_Field extends Activity {
 	public LayoutInflater layoutInflater;
 	DisplayMetrics metrics;
 	ToolBox toolBox;
+	
+	
 	
 	
 	@Override
@@ -230,5 +237,8 @@ public class My_Field extends Activity {
 	        }
 
 	    } 
+	 
+	 
+	 
 
 }

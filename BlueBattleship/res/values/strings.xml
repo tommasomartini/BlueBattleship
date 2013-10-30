@@ -11,5 +11,8 @@
     <string name="title_activity_match">Match</string>
     <string name="title_activity_match__win">Match_Win</string>
     <string name="title_activity_my__field">My_Field</string>
+    <string name="title_connected_to">connesso a</string>
+    <string name="title_connecting">connessione</string>
+    <string name="title_not_connected">non connesso</string>
 
 </resources>
