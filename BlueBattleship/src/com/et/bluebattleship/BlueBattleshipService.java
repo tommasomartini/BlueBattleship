@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -44,6 +45,8 @@ public class BlueBattleshipService {
     private ConnectThread connectThread;
     private ConnectedThread mConnectedThread;
     private int mState;
+    
+    private Context context;
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -59,6 +62,7 @@ public class BlueBattleshipService {
     public BlueBattleshipService(Context context, Handler handler) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
+        this.context = context;
         mHandler = handler;
     }
 

@@ -74,6 +74,7 @@ public class Main_Blue_Battleship extends Activity {
 	private Button btActBT;
 	private Button btDeactBT;
 	private Button btSearchDevices;
+	private Button btSend;
 
 	private List<BluetoothDevice> bluetoothDevices;
 
@@ -117,6 +118,7 @@ public class Main_Blue_Battleship extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 				BluetoothDevice bluetoothDevice = bluetoothDevices.get(position);
+				blueBattleshipService.connect(bluetoothDevice, false);
 				toolBox.primo=true;
 			}
 
@@ -126,7 +128,8 @@ public class Main_Blue_Battleship extends Activity {
 		btActBT = (Button)findViewById(R.id.btActBT);
 		btDeactBT = (Button)findViewById(R.id.btDeactBT);
 		btSearchDevices = (Button)findViewById(R.id.btSearchDevices);
-
+		btSend = (Button)findViewById(R.id.btSend);
+		
 		if (bluetoothAdapter.isEnabled()) {
 			btActBT.setEnabled(false);
 		} else {
@@ -176,6 +179,16 @@ public class Main_Blue_Battleship extends Activity {
 				IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 				registerReceiver(mReceiver, filter);
 				bluetoothAdapter.startDiscovery();
+			}
+		});
+		
+		btSend.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String totCuloCane = "Sti cazzi! Enea, ora fammi sta bocca che ti fecondo l'intestino tenue!";
+				byte[] bytes = totCuloCane.getBytes();
+				blueBattleshipService.write(bytes);
 			}
 		});
 	}
@@ -316,7 +329,7 @@ public class Main_Blue_Battleship extends Activity {
 
 //    questa variabile prima non era statica!
 //     The Handler that gets information back from the BluetoothChatService
-    private static final Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -345,6 +358,7 @@ public class Main_Blue_Battleship extends Activity {
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
+                toastDebug(readMessage);
 //                mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:
@@ -423,7 +437,7 @@ public class Main_Blue_Battleship extends Activity {
 //    }
     
     private void toastDebug(String msg) {
-		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}
     
     private class DeviceAdapter extends BaseAdapter {
