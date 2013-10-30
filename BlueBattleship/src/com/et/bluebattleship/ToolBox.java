@@ -3,7 +3,7 @@ package com.et.bluebattleship;
 public class ToolBox {
 	
 	private static ToolBox me;
-	public boolean primo=false;
+	public boolean primo=true;
 	public boolean[] campoVirtuale;
 	public boolean[] my_field;
 	public boolean[] enemy_field;
