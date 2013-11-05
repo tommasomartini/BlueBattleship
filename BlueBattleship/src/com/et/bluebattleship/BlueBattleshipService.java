@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -23,32 +22,30 @@ import android.widget.Toast;
  * thread for performing data transmissions when connected.
  */
 public class BlueBattleshipService {
-    // Debugging
+	
+//  Debugging
     private static final String TAG = "BlueBattleshipService";
-    private static final boolean D = true;
+    private static final boolean D = true;	// set to true if debugging
 
-    // Name for the SDP record when creating server socket
-    private static final String NAME_SECURE = "BluetoothChatSecure";
-    private static final String NAME_INSECURE = "BluetoothChatInsecure";
+//    Name for the SDP record when creating server socket
+    private static final String NAME_SDP_RECORD = "BluetoothBattleship";
 
-    // Unique UUID for this application
-    private static final UUID MY_UUID_SECURE =
-        UUID.fromString("5f60bd00-377a-11e3-aa6e-0800200c9a66");
-    private static final UUID MY_UUID_INSECURE =
-        UUID.fromString("79e6f0d0-377b-11e3-aa6e-0800200c9a66");
+//    Unique UUID for this application
+    private static final UUID MY_UUID = UUID.fromString("5f60bd00-377a-11e3-aa6e-0800200c9a66");
+//    private static final UUID MY_UUID_INSECURE =
+//        UUID.fromString("79e6f0d0-377b-11e3-aa6e-0800200c9a66");
 
-    // Member fields
+//    Member fields
     private final BluetoothAdapter bluetoothAdapter;
     private final Handler mHandler;
-    private AcceptThread mSecureAcceptThread;
+    private AcceptThread acceptThread;
     private AcceptThread mInsecureAcceptThread;
     private ConnectThread connectThread;
-    private ConnectedThread mConnectedThread;
+    private ConnectedThread connectedThread;
     private int mState;
-    
     private Context context;
 
-    // Constants that indicate the current connection state
+//    Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
@@ -74,7 +71,7 @@ public class BlueBattleshipService {
         if (D) Log.d(TAG, "setState() " + mState + " -> " + state);
         mState = state;
 
-        // Give the new state to the Handler so the UI Activity can update
+//        Give the new state to the Handler so the UI Activity can update
         mHandler.obtainMessage(Main_Blue_Battleship.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
@@ -90,28 +87,24 @@ public class BlueBattleshipService {
     public synchronized void start() {
         if (D) Log.d(TAG, "START");
 
-        // Cancel any thread attempting to make a connection
+//        Cancel any thread attempting to make a connection
         if (connectThread != null) {
         	connectThread.cancel(); 
         	connectThread = null;
         }
 
-        // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {
-        	mConnectedThread.cancel(); 
-        	mConnectedThread = null;
+//        Cancel any thread currently running a connection
+        if (connectedThread != null) {
+        	connectedThread.cancel(); 
+        	connectedThread = null;
         }
 
         setState(STATE_LISTEN);
 
-        // Start the thread to listen on a BluetoothServerSocket
-        if (mSecureAcceptThread == null) {
-            mSecureAcceptThread = new AcceptThread(true);
-            mSecureAcceptThread.start();
-        }
-        if (mInsecureAcceptThread == null) {
-            mInsecureAcceptThread = new AcceptThread(false);
-            mInsecureAcceptThread.start();
+//        Start the thread to listen on a BluetoothServerSocket
+        if (acceptThread == null) {
+            acceptThread = new AcceptThread();
+            acceptThread.start();
         }
     }
 
@@ -120,19 +113,27 @@ public class BlueBattleshipService {
      * @param device  The BluetoothDevice to connect
      * @param secure Socket Security type - Secure (true) , Insecure (false)
      */
-    public synchronized void connect(BluetoothDevice device, boolean secure) {
+    public synchronized void connect(BluetoothDevice device) {
         if (D) Log.d(TAG, "connect to: " + device);
 
         // Cancel any thread attempting to make a connection
         if (mState == STATE_CONNECTING) {
-            if (connectThread != null) {connectThread.cancel(); connectThread = null;}
+            if (connectThread != null) {
+            	connectThread.cancel(); 
+            	connectThread = null;
+            }
         }
 
         // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
+        if (connectedThread != null) {
+        	connectedThread.cancel(); 
+        	connectedThread = null;
+        }
+        
+//        TODO non devo cancellare anche il thread in ascolto??
 
         // Start the thread to connect with the given device
-        connectThread = new ConnectThread(device, secure);
+        connectThread = new ConnectThread(device);
         connectThread.start();
         setState(STATE_CONNECTING);
     }
@@ -142,36 +143,32 @@ public class BlueBattleshipService {
      * @param socket  The BluetoothSocket on which the connection was made
      * @param device  The BluetoothDevice that has been connected
      */
-    public synchronized void connected(BluetoothSocket socket, BluetoothDevice device, final String socketType) {
-        if (D) Log.d(TAG, "connected, Socket Type:" + socketType);
+    public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
+        if (D) Log.d(TAG, "connected");
 
-        // Cancel the thread that completed the connection
+//      Cancel the thread that completed the connection
         if (connectThread != null) {
         	connectThread.cancel(); 
         	connectThread = null;
         }
 
-        // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {
-        	mConnectedThread.cancel(); 
-        	mConnectedThread = null;
+//      Cancel any thread currently running a connection
+        if (connectedThread != null) {
+        	connectedThread.cancel(); 
+        	connectedThread = null;
         }
 
-        // Cancel the accept thread because we only want to connect to one device
-        if (mSecureAcceptThread != null) {
-            mSecureAcceptThread.cancel();
-            mSecureAcceptThread = null;
-        }
-        if (mInsecureAcceptThread != null) {
-            mInsecureAcceptThread.cancel();
-            mInsecureAcceptThread = null;
+//      Cancel the accept thread because we only want to connect to one device
+        if (acceptThread != null) {
+            acceptThread.cancel();
+            acceptThread = null;
         }
 
-        // Start the thread to manage the connection and perform transmissions
-        mConnectedThread = new ConnectedThread(socket, socketType);
-        mConnectedThread.start();
+//      Start the thread to manage the connection and perform transmissions
+        connectedThread = new ConnectedThread(socket);
+        connectedThread.start();
 
-        // Send the name of the connected device back to the UI Activity
+//      Send the name of the connected device back to the UI Activity
         Message msg = mHandler.obtainMessage(Main_Blue_Battleship.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(Main_Blue_Battleship.DEVICE_NAME, device.getName());
@@ -192,14 +189,14 @@ public class BlueBattleshipService {
             connectThread = null;
         }
 
-        if (mConnectedThread != null) {
-            mConnectedThread.cancel();
-            mConnectedThread = null;
+        if (connectedThread != null) {
+            connectedThread.cancel();
+            connectedThread = null;
         }
 
-        if (mSecureAcceptThread != null) {
-            mSecureAcceptThread.cancel();
-            mSecureAcceptThread = null;
+        if (acceptThread != null) {
+            acceptThread.cancel();
+            acceptThread = null;
         }
 
         if (mInsecureAcceptThread != null) {
@@ -219,8 +216,9 @@ public class BlueBattleshipService {
         ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
         synchronized (this) {
-            if (mState != STATE_CONNECTED) return;
-            r = mConnectedThread;
+            if (mState != STATE_CONNECTED) 
+            	return;
+            r = connectedThread;
         }
         // Perform the write unsynchronized
         r.write(out);
@@ -262,56 +260,46 @@ public class BlueBattleshipService {
      * (or until cancelled).
      */
     private class AcceptThread extends Thread {
-        // The local server socket
-        private final BluetoothServerSocket mmServerSocket;
-        private String mSocketType;
+//      The local server socket
+        private final BluetoothServerSocket serverSocket;
 
-        public AcceptThread(boolean secure) {
+        public AcceptThread() {
             BluetoothServerSocket tmp = null;
-            mSocketType = secure ? "Secure":"Insecure";
 
-            // Create a new listening server socket
+//          Create a new listening server socket
             try {
-                if (secure) {
-                    tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME_SECURE,
-                        MY_UUID_SECURE);
-                } else {
-                    tmp = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(
-                            NAME_INSECURE, MY_UUID_INSECURE);
-                }
+            	tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME_SDP_RECORD, MY_UUID);
             } catch (IOException e) {
-                Log.e(TAG, "Socket Type: " + mSocketType + "listen() failed", e);
+                Log.e(TAG, "Socket listen() failed", e);
             }
-            mmServerSocket = tmp;
+            serverSocket = tmp;
         }
 
         public void run() {
-            if (D) Log.d(TAG, "Socket Type: " + mSocketType +
-                    "BEGIN mAcceptThread" + this);
-            setName("AcceptThread" + mSocketType);
+            if (D) Log.d(TAG, "Socket BEGIN mAcceptThread" + this);
+            setName("AcceptThread");
 
             BluetoothSocket socket = null;
 
-            // Listen to the server socket if we're not connected
+//          Listen to the server socket if we're not connected
             while (mState != STATE_CONNECTED) {
                 try {
-                    // This is a blocking call and will only return on a
-                    // successful connection or an exception
-                    socket = mmServerSocket.accept();
+//                  This is a blocking call and will only return on a
+//                  successful connection or an exception
+                    socket = serverSocket.accept();
                 } catch (IOException e) {
-                    Log.e(TAG, "Socket Type: " + mSocketType + "accept() failed", e);
+                    Log.e(TAG, "Socket                           accept() failed", e);
                     break;
                 }
 
-                // If a connection was accepted
+//              If a connection was accepted
                 if (socket != null) {
                     synchronized (BlueBattleshipService.this) {
                         switch (mState) {
                         case STATE_LISTEN:
                         case STATE_CONNECTING:
                             // Situation normal. Start the connected thread.
-                            connected(socket, socket.getRemoteDevice(),
-                                    mSocketType);
+                            connected(socket, socket.getRemoteDevice());
                             break;
                         case STATE_NONE:
                         case STATE_CONNECTED:
@@ -326,16 +314,16 @@ public class BlueBattleshipService {
                     }
                 }
             }
-            if (D) Log.i(TAG, "END mAcceptThread, socket Type: " + mSocketType);
+            if (D) Log.i(TAG, "END mAcceptThread");
 
         }
 
         public void cancel() {
-            if (D) Log.d(TAG, "Socket Type" + mSocketType + "cancel " + this);
+            if (D) Log.d(TAG, "Socket cancel " + this);
             try {
-                mmServerSocket.close();
+                serverSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "Socket Type" + mSocketType + "close() of server failed", e);
+                Log.e(TAG, "Socket close() of server failed", e);
             }
         }
     }
@@ -349,32 +337,25 @@ public class BlueBattleshipService {
     private class ConnectThread extends Thread {
         private final BluetoothSocket bluetoothSocket;
         private final BluetoothDevice bluetoothDevice;
-        private String socketType;
+//        private String socketType;
 
-        public ConnectThread(BluetoothDevice device, boolean secure) {
+        public ConnectThread(BluetoothDevice device) {
             bluetoothDevice = device;
             BluetoothSocket tmp = null;
-            socketType = secure ? "Secure" : "Insecure";
 
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                if (secure) {
-                    tmp = device.createRfcommSocketToServiceRecord(
-                            MY_UUID_SECURE);
-                } else {
-                    tmp = device.createInsecureRfcommSocketToServiceRecord(
-                            MY_UUID_INSECURE);
-                }
+            	tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
             } catch (IOException e) {
-                Log.e(TAG, "Socket Type: " + socketType + "create() failed", e);
+                Log.e(TAG, "Socket create() failed", e);
             }
             bluetoothSocket = tmp;
         }
 
         public void run() {
-            Log.i(TAG, "BEGIN mConnectThread SocketType:" + socketType);
-            setName("ConnectThread" + socketType);
+            Log.i(TAG, "BEGIN mConnectThread");
+            setName("ConnectThread");
 
 //             Always cancel discovery because it will slow down a connection
             bluetoothAdapter.cancelDiscovery();
@@ -389,8 +370,7 @@ public class BlueBattleshipService {
                 try {
                     bluetoothSocket.close();
                 } catch (IOException e2) {
-                    Log.e(TAG, "unable to close() " + socketType +
-                            " socket during connection failure", e2);
+                    Log.e(TAG, "unable to close() socket during connection failure", e2);
                 }
                 connectionFailed();
                 return;
@@ -402,14 +382,14 @@ public class BlueBattleshipService {
             }
 
 //             Start the connected thread
-            connected(bluetoothSocket, bluetoothDevice, socketType);
+            connected(bluetoothSocket, bluetoothDevice);
         }
 
         public void cancel() {
             try {
                 bluetoothSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "close() of connect " + socketType + " socket failed", e);
+                Log.e(TAG, "close() of connect socket failed", e);
             }
         }
     }
@@ -423,13 +403,13 @@ public class BlueBattleshipService {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
-        public ConnectedThread(BluetoothSocket socket, String socketType) {
-            Log.d(TAG, "create ConnectedThread: " + socketType);
+        public ConnectedThread(BluetoothSocket socket) {
+            Log.d(TAG, "create ConnectedThread: ");
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
-            // Get the BluetoothSocket input and output streams
+//             Get the BluetoothSocket input and output streams
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
@@ -458,8 +438,6 @@ public class BlueBattleshipService {
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
-                    // Start the service over to restart listening mode
-                    BlueBattleshipService.this.start();
                     break;
                 }
             }

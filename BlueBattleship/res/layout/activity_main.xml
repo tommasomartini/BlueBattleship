@@ -7,18 +7,6 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/btActBT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bt_act_bluetooth" />
-
-    <Button
-        android:id="@+id/btDeactBT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bt_deact_bluetooth" />
-
-    <Button
         android:id="@+id/btSearchDevices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
