@@ -118,7 +118,7 @@ public class Main_Blue_Battleship extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 				BluetoothDevice bluetoothDevice = bluetoothDevices.get(position);
-				blueBattleshipService.connect(bluetoothDevice, false);
+				blueBattleshipService.connect(bluetoothDevice, true);
 				toolBox.primo=true;
 			}
 
