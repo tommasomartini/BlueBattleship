@@ -115,11 +115,13 @@ public class Main_Blue_Battleship extends Activity {
 				}
 				break;
 			case MESSAGE_WRITE:
+				break;
 			case MESSAGE_READ:
 				byte[] readBuf = (byte[]) msg.obj;
 //				 construct a string from the valid bytes in the buffer
 				String readMessage = new String(readBuf, 0, msg.arg1);
-				Log.i(TAG, readMessage);						
+				Log.i(TAG, readMessage);
+				bbToast(readMessage);
 				break;
 			case MESSAGE_DEVICE_NAME:
 //				 save the connected device's name
@@ -127,6 +129,7 @@ public class Main_Blue_Battleship extends Activity {
 				bbToast("Connected with " + connectedDeviceName);
 				break;
 			case MESSAGE_TOAST:
+				bbToast(msg.getData().getString(TOAST));
 			}
 		}
 	};
@@ -228,9 +231,11 @@ public class Main_Blue_Battleship extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				String totCuloCane = "Sti cazzi! Enea, ora fammi sta bocca che ti fecondo l'intestino tenue!";
-				byte[] bytes = totCuloCane.getBytes();
-				blueBattleshipService.write(bytes);
+//				String totCuloCane = "Sti cazzi! Enea, ora fammi sta bocca che ti fecondo l'intestino tenue!";
+				String totCuloCane = "hello";
+//				byte[] bytes = totCuloCane.getBytes();
+//				blueBattleshipService.write(bytes);
+				sendMessage(totCuloCane);
 			}
 		});
 	}
@@ -303,7 +308,7 @@ public class Main_Blue_Battleship extends Activity {
 		blueBattleshipService = new BlueBattleshipService(this, handler);
 
 		// Initialize the buffer for outgoing messages
-//		mOutStringBuffer = new StringBuffer("");
+		mOutStringBuffer = new StringBuffer("");
 	}
 
 //	make the device visible to be seen by or to connect to another device
@@ -335,9 +340,14 @@ public class Main_Blue_Battleship extends Activity {
 
 		// Check that there's actually something to send
 		if (message.length() > 0) {
+			Log.i(TAG, "messaggio maggiore di zero. Vado a prendermi i byte!");
 			// Get the message bytes and tell the BluetoothChatService to write
 			byte[] send = message.getBytes();
+			Log.i(TAG, "ho preso i byte!");
 			blueBattleshipService.write(send);
+			
+			 // Reset out string buffer to zero 
+	        mOutStringBuffer.setLength(0);
 		}
 	}
 
