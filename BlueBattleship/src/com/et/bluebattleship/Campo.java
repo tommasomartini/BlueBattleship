@@ -28,6 +28,9 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class Campo extends Activity {
+	
+	private static final byte ID_MSG_ENEMY_FIELD = 2;
+	
 	public int lunghezzaNave;
 	public Context context;
 	public Resources res;
@@ -213,6 +216,17 @@ public class Campo extends Activity {
 		toolBox.campoVirtuale[0]=true;
 		toolBox.my_field=pres;
 		toolBox.mancato_enemy=new boolean[100];
+		
+		byte[] sendField = new byte[101];
+		for (int i = 1; i < pres.length; i++) {
+			if (pres[i - 1] == true) {
+				sendField[i] = 1;
+			} else {
+				sendField[i] = 0;
+			}
+		}
+		sendField[0] = ID_MSG_ENEMY_FIELD;
+		toolBox.mBlueBattleshipService.write(sendField);
 		if(toolBox.primo) startActivity(Match);
 		else startActivity(MyField);
 	}

@@ -118,10 +118,33 @@ public class Main_Blue_Battleship extends Activity {
 				break;
 			case MESSAGE_READ:
 				byte[] readBuf = (byte[]) msg.obj;
-//				 construct a string from the valid bytes in the buffer
-				String readMessage = new String(readBuf, 0, msg.arg1);
-				Log.i(TAG, readMessage);
-				bbToast(readMessage);
+				switch (readBuf[0]) {
+				case 2:
+					boolean[] tmpEnemyField = new boolean[100];
+					for (int i = 1; i < 101; i++) {
+						if (readBuf[i] == 1) {
+							tmpEnemyField[i - 1] = true;
+						} else {
+							tmpEnemyField[i - 1] = false;
+						}
+					}
+					toolBox.enemy_field = tmpEnemyField;
+					break;
+					
+				case 3:
+					break;
+					
+				case 4:
+//					 construct a string from the valid bytes in the buffer
+					String readMessage = new String(readBuf, 0, msg.arg1);
+					Log.i(TAG, readMessage);
+					bbToast(readMessage);
+					break;
+
+				default:
+					break;
+				}
+				
 				break;
 			case MESSAGE_DEVICE_NAME:
 //				 save the connected device's name
@@ -306,7 +329,7 @@ public class Main_Blue_Battleship extends Activity {
 
 //		Initialize the BluetoothChatService to perform bluetooth connections
 		blueBattleshipService = new BlueBattleshipService(this, handler);
-
+		toolBox.mBlueBattleshipService = blueBattleshipService;
 		// Initialize the buffer for outgoing messages
 		mOutStringBuffer = new StringBuffer("");
 	}

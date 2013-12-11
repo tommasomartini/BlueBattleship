@@ -92,12 +92,10 @@ public class Match_Enemy extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_match);
-		
-		mBlueBattleshipService=toolBox.mBlueBattleshipService;
-		
-		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		toolBox=ToolBox.getInstance();
-		naviPrese=toolBox.enemy_field;
+		mBlueBattleshipService=toolBox.mBlueBattleshipService;
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//		naviPrese=toolBox.enemy_field;
 		mancato=toolBox.mancato_enemy;
 		
 
@@ -160,6 +158,8 @@ public class Match_Enemy extends Activity {
 		String pos=""+posizione;
 		byte[] pot = pos.getBytes();
 		mBlueBattleshipService.write(pot);
+		
+		
 		return true;
 		//sendMessage(""+posizione);
 		
