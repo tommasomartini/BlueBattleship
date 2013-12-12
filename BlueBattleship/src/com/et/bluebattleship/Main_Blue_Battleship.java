@@ -179,7 +179,11 @@ public class Main_Blue_Battleship extends Activity {
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 				bluetoothAdapter.cancelDiscovery();
 				BluetoothDevice bluetoothDevice = bluetoothDevices.get(position);
+
+				
+
 				blueBattleshipService.connect(bluetoothDevice);
+
 				toolBox.primo=true;
 			}
 

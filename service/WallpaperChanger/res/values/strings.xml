@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Sfondi automatici</string>
+	<string name="startService">Gestisci gli sfondi</string>
+	<string name="stopService">Smettila di gestire gli sfondi</string>
+	<string name="finish">Nascondi</string>
+</resources>
