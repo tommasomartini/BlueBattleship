@@ -233,7 +233,9 @@ public class Campo extends Activity {
 		toolBox.colpite=new boolean[100];
 		toolBox.campoVirtuale[0]=true;
 		toolBox.mancato_enemy=new boolean[100];
+
 		toolBox.state_enemy_field=new boolean[100];
+
 		
 		byte[] sendField = new byte[101];
 		for (int i = 1; i < pres.length; i++) {

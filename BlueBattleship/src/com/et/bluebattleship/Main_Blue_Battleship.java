@@ -129,6 +129,7 @@ public class Main_Blue_Battleship extends Activity {
 						}
 					}
 					toolBox.enemy_field = tmpEnemyField;
+
 					toolBox.data_change=true;
 					break;
 					
@@ -157,7 +158,9 @@ public class Main_Blue_Battleship extends Activity {
 
 				default:
 					bbToast("nulla");
+
 					break;
+
 				}
 				
 				break;

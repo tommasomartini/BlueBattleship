@@ -86,7 +86,7 @@ public class My_Field extends Activity {
         } catch (Exception e) {
         Log.e("tag", e.getMessage());
         }
-        progressDialog.dismiss();
+        progressDialog1.dismiss();
         
         }
         }.start();

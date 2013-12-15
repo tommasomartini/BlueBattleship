@@ -55,8 +55,16 @@ public class Match_Enemy extends Activity {
 		
 		setContentView(R.layout.activity_match);
 
+
 		
 		toolBox=ToolBox.getInstance();
+
+		toolBox=ToolBox.getInstance();
+		mBlueBattleshipService=toolBox.mBlueBattleshipService;
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//		naviPrese=toolBox.enemy_field;
+		mancato=toolBox.mancato_enemy;
+
 		
 		progressDialog = ProgressDialog.show(Match_Enemy.this, "", "Waiting For Enemy...Get Ready For the BATTLE!");
 		progressDialog.setCancelable(true);
@@ -153,6 +161,20 @@ public class Match_Enemy extends Activity {
 		toolBox.mancato_enemy=mancato;
 		startActivity(intent);
 		finish();
+	}
+	
+
+	public boolean COLPISCI(int posizione){
+		String pos=""+posizione;
+		byte[] pot = pos.getBytes();
+		mBlueBattleshipService.write(pot);
+		
+		
+		return true;
+		//sendMessage(""+posizione);
+		
+		//ritorna true o false
+		
 	}
 	
 
