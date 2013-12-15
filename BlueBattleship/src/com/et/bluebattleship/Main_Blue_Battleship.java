@@ -118,15 +118,54 @@ public class Main_Blue_Battleship extends Activity {
 				break;
 			case MESSAGE_READ:
 				byte[] readBuf = (byte[]) msg.obj;
-//				 construct a string from the valid bytes in the buffer
-				String readMessage = new String(readBuf, 0, msg.arg1);
-				Log.i(TAG, readMessage);
-				bbToast(readMessage);
+				switch (readBuf[0]) {
+				case 2:
+					boolean[] tmpEnemyField = new boolean[100];
+					for (int i = 1; i < 101; i++) {
+						if (readBuf[i] == 1) {
+							tmpEnemyField[i - 1] = true;
+						} else {
+							tmpEnemyField[i - 1] = false;
+						}
+					}
+					toolBox.enemy_field = tmpEnemyField;
+					toolBox.data_change=true;
+					break;
+					
+				case 3:
+					String finale;
+					bbToast("sono dentro");
+					String readMessage = new String(readBuf, 0, msg.arg1);
+					if(readMessage.length()==3){
+					char a=readMessage.charAt(1);
+					char b=readMessage.charAt(2);
+					finale=""+a+b;
+					
+					}else{
+						char a=readMessage.charAt(1);
+						
+						finale=""+a;
+					}
+					bbToast(finale);
+					toolBox.hit=Integer.parseInt(finale);
+					toolBox.report_hit=true;
+					break;
+					
+				case 4:
+					 
+					break;
+
+				default:
+					bbToast("nulla");
+					break;
+				}
+				
 				break;
 			case MESSAGE_DEVICE_NAME:
 //				 save the connected device's name
 				connectedDeviceName = msg.getData().getString(DEVICE_NAME);
 				bbToast("Connected with " + connectedDeviceName);
+				runCampo();
 				break;
 			case MESSAGE_TOAST:
 				bbToast(msg.getData().getString(TOAST));
@@ -170,7 +209,7 @@ public class Main_Blue_Battleship extends Activity {
 //		btActBT = (Button)findViewById(R.id.btActBT);
 //		btDeactBT = (Button)findViewById(R.id.btDeactBT);
 		btSearchDevices = (Button)findViewById(R.id.btSearchDevices);
-		btSend = (Button)findViewById(R.id.btSend);
+		//btSend = (Button)findViewById(R.id.btSend);
 
 		//vado al campo
 		Button Campo=(Button)findViewById(R.id.startCampo);
@@ -231,17 +270,17 @@ public class Main_Blue_Battleship extends Activity {
 			}
 		});
 
-		btSend.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-//				String totCuloCane = "Sti cazzi! Enea, ora fammi sta bocca che ti fecondo l'intestino tenue!";
-				String totCuloCane = "hello";
-//				byte[] bytes = totCuloCane.getBytes();
-//				blueBattleshipService.write(bytes);
-				sendMessage(totCuloCane);
-			}
-		});
+//		btSend.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+////				String totCuloCane = "Sti cazzi! Enea, ora fammi sta bocca che ti fecondo l'intestino tenue!";
+//				String totCuloCane = "hello";
+////				byte[] bytes = totCuloCane.getBytes();
+////				blueBattleshipService.write(bytes);
+//				sendMessage(totCuloCane);
+//			}
+//		});
 	}
 	
 	@Override
@@ -310,7 +349,7 @@ public class Main_Blue_Battleship extends Activity {
 
 //		Initialize the BluetoothChatService to perform bluetooth connections
 		blueBattleshipService = new BlueBattleshipService(this, handler);
-
+		toolBox.mBlueBattleshipService = blueBattleshipService;
 		// Initialize the buffer for outgoing messages
 		mOutStringBuffer = new StringBuffer("");
 	}
@@ -420,6 +459,7 @@ public class Main_Blue_Battleship extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			TextView tvDevice = new TextView(context);
 			tvDevice.setText(bluetoothDevices.get(position).getName());
+			tvDevice.setTextSize(30);
 			return tvDevice;
 		}
 	}

@@ -8,11 +8,13 @@
     <string name="bt_act_bluetooth">Attiva bluetooth</string>
     <string name="bt_deact_bluetooth">Disattiva bluetooth</string>
     <string name="bt_search_bt_devices">Ricerca dispositivi</string>
-    <string name="title_activity_match">Match</string>
+    <string name="title_activity_match">Match_Enemy</string>
     <string name="title_activity_match__win">Match_Win</string>
     <string name="title_activity_my__field">My_Field</string>
     <string name="title_connected_to">connesso a</string>
     <string name="title_connecting">connessione</string>
     <string name="title_not_connected">non connesso</string>
+    <string name="title_activity_match_enemy_2">Match_enemy_2</string>
+    <string name="title_activity_prova">Prova</string>
 
 </resources>

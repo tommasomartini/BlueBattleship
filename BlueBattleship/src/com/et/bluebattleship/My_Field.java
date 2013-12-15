@@ -1,46 +1,43 @@
 package com.et.bluebattleship;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 public class My_Field extends Activity {
-	public boolean[] colpito;
-	public boolean[] mioCampo;
-	public Resources res;
-	public Drawable drawable; 
-	public Drawable drawable2;
-	public GridView grid;
+	private boolean[] colpito;
+	private boolean[] mioCampo;
+	private int[] shipType; 
+	private Resources res;
+	private Drawable drawable; 
+	private Drawable drawable2;
+	private GridView grid;
 	private MyAdapter adapter;
-	int n=0;
-	public LayoutInflater layoutInflater;
-	DisplayMetrics metrics;
-	ToolBox toolBox;
-	
-	
-	
+	private LayoutInflater layoutInflater;
+	private DisplayMetrics metrics;
+	private ToolBox toolBox;
+	private ProgressDialog progressDialog;
+	private ProgressDialog progressDialog1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -50,13 +47,114 @@ public class My_Field extends Activity {
 		toolBox=ToolBox.getInstance();
 		colpito=toolBox.colpite;
 		mioCampo=toolBox.my_field;
+		
+		
+		progressDialog1 = ProgressDialog.show(My_Field.this, "", "Waiting For Enemy...Get Ready For the BATTLE!");
+		progressDialog1.setCancelable(true);
+		progressDialog1.setOnCancelListener(new OnCancelListener(){
+
+            @Override
+            public void onCancel(DialogInterface arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(progressDialog.getContext());
+                builder.setMessage( "Are you sure you want to cancel?")
+                       .setCancelable(false)
+                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface diag, int id) {
+                               diag.dismiss();
+                               progressDialog1.dismiss();
+                               finish();
+
+                           }
+                       })
+                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface diag, int id) {
+                                diag.cancel();
+                                
+                           }
+                       });
+                AlertDialog alert = builder.create();
+                alert.show();               
+            }
+
+        });
+        new Thread() {
+        public void run() {
+        try{
+        while(!toolBox.data_change){
+        	sleep(500);
+        }
+        } catch (Exception e) {
+        Log.e("tag", e.getMessage());
+        }
+        progressDialog.dismiss();
+        
+        }
+        }.start();
+		
+		
+		
+		progressDialog=new ProgressDialog(getApplicationContext());
+		//progressDialog = ProgressDialog.show(My_Field.this, "", "Waiting For Enemy...Get Ready For the BATTLE!");
+		progressDialog.setCancelable(true);
+		progressDialog.setOnCancelListener(new OnCancelListener(){
+
+            @Override
+            public void onCancel(DialogInterface arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(progressDialog.getContext());
+                builder.setMessage( "Are you sure you want to cancel?")
+                       .setCancelable(false)
+                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface diag, int id) {
+                               diag.dismiss();
+                               progressDialog.dismiss();
+                               finish();
+
+                           }
+                       })
+                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface diag, int id) {
+                                diag.cancel();
+                                
+                           }
+                       });
+                AlertDialog alert = builder.create();
+                alert.show();               
+            }
+
+        });
+        new Thread() {
+        public void run() {
+        try{
+        while(!toolBox.report_hit){
+        	sleep(500);
+        }
+        } catch (Exception e) {
+        Log.e("tag", e.getMessage());
+        }
+        progressDialog.dismiss();
+        if(toolBox.my_field[toolBox.hit]){
+        	toolBox.colpite[toolBox.hit]=true;
+        	toolBox.report_hit=false;
+        	//ma.notifyDataSetChanged();
+        	Intent i=new Intent(getApplicationContext(), My_Field.class);
+    		startActivity(i);
+    		finish();
+        }else{
+        	toolBox.report_hit=false;
+        	//ma.notifyDataSetChanged();
+        	Intent i=new Intent(getApplicationContext(), Match_Enemy.class);
+    		startActivity(i);
+    		finish();
+        }
+        }
+        }.start();
+        
+		
 		metrics = new DisplayMetrics();
 		 getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		 TH u = new TH();
 		layoutInflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 		adapter=new MyAdapter(this,layoutInflater,metrics.widthPixels);
 		grid = (GridView)findViewById(R.id.g);
-		
 		grid.setAdapter(adapter);
 		grid.setHorizontalSpacing(2);
 		grid.setOnItemClickListener(new OnItemClickListener() {
@@ -65,29 +163,22 @@ public class My_Field extends Activity {
 			}
 				
 		});
-		if(mioCampo[toolBox.nemicoVirtuale]){
-			colpito[toolBox.nemicoVirtuale++]=true;
-			adapter.notifyDataSetChanged();
-			//u.run();
-		}else{
-			toolBox.nemicoVirtuale++;
-			//u.run();
-		}
-		
-		
-		
-		Button b=(Button)findViewById(R.id.but);
-		b.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				rr();
-				
-			}
-		});
-		
 
 	}
+	
+
+	public void restart(){
+		Intent i=new Intent(this,My_Field.class);
+		startActivity(i);
+		finish();
+	}
+	
+	public void build(){
+		
+		        (Toast.makeText(getApplicationContext(), "boh", Toast.LENGTH_SHORT)).show();
+		
+	}
+	
 	
 	public void rr(){
 		Intent i=new Intent(this,Match_Enemy.class);
@@ -96,24 +187,11 @@ public class My_Field extends Activity {
 		finish();
 	}
 	
-	private class TH extends Thread{
-		
-		public void run(){
-			try{
-			Thread.sleep(5000);
-			}catch(Exception e){}
+	public class newThread{
+		public MyAdapter ma;
+		public newThread(MyAdapter ma){
+			this.ma=ma;
 		}
-		
-	}
-	public class ricezione extends Thread{
-		//ricevi dati dal service 
-		//controllo in mioCampo se ha colpito setto statoCampo(position)=true
-		//adapter.notifyDataSetChanged();
-		//se ha colpito continuo a seguire
-		//se ha macato toolBox.colpite=statoCampo;
-		//startActivity(Match_enemy);
-		//onDestroy();
-		
 	}
 	
 	
@@ -193,7 +271,7 @@ public class My_Field extends Activity {
 				res=getResources();
 				drawable = res.getDrawable(R.drawable.grey);
 				SquareImageView squareImageView=new SquareImageView(context,pixelW);
-				Drawable blue = getResources().getDrawable(R.drawable.blue);
+				Drawable blue = getResources().getDrawable(R.drawable.vuoto);
 				Drawable burn = getResources().getDrawable(R.drawable.burn);
 				Drawable grey = getResources().getDrawable(R.drawable.grey);
 
@@ -205,40 +283,6 @@ public class My_Field extends Activity {
 				return squareImageView;
 			}
 			
-		}
-	 
-	 
-	 
-	 private class Utils {
-
-	        public void showDummyWaitingDialog(final Context context, final Intent startingIntent) {
-	            // ...
-	            final ProgressDialog progressDialog = ProgressDialog.show(context, "Please wait...", "Loading data ...", true);
-
-	            new Thread() {
-	                public void run() {
-	                    try{
-	                        // Do some work here
-	                        sleep(5000);
-	                    } catch (Exception e) {
-	                    }
-	                    // start next intent
-	                    new Thread() {
-	                        public void run() {
-	                        // Dismiss the Dialog 
-	                        progressDialog.dismiss();
-	                        // start selected activity
-	                        if ( startingIntent != null) context.startActivity(startingIntent);
-	                        }
-	                    }.start();
-	                }
-	            }.start();  
-
-	        }
-
-	    } 
-	 
-	 
-	 
+		} 
 
 }

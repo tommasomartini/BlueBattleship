@@ -4,13 +4,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context=".My_Field" >
-
-    <Button
-        android:id="@+id/but"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
+    tools:context=".My_Field"
+    android:background="@drawable/onda2" >
 
     <GridView
         android:id="@+id/g"

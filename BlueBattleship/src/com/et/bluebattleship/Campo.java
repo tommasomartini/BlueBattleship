@@ -28,11 +28,26 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class Campo extends Activity {
+	
+	private static final byte ID_MSG_ENEMY_FIELD = 2;
+	
 	public int lunghezzaNave;
+	private int[] shipType;
 	public Context context;
 	public Resources res;
 	public Display display;
 	public Drawable drawable; 
+	public Drawable nave1;
+	public Drawable nave2a;
+	public Drawable nave2b;
+	public Drawable nave3a;
+	public Drawable nave3b;
+	public Drawable nave3c;
+	public Drawable nave2av;
+	public Drawable nave2bv;
+	public Drawable nave3av;
+	public Drawable nave3bv;
+	public Drawable nave3cv; 
 	private boolean[] pres;
 	private boolean naveAttiva;
 	private ToggleButton orizzontale;
@@ -60,6 +75,7 @@ public class Campo extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_campo);
+		shipType=new int[100];
 		grid = (GridView)findViewById(R.id.grid);
 		layout=(LinearLayout)findViewById(R.id.principale);
 		layoutInflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -81,6 +97,7 @@ public class Campo extends Activity {
 						naveAttiva=false;
 						nave_1.setClickable(false);
 						naveDaUno.settaNave(position);
+						
 						layout.addView(fill1, 1);
 						nomeNave=(TextView)fill1.getChildAt(0);
 						nomeNave.setText(naveDaUno.getPosizioni());
@@ -99,9 +116,13 @@ public class Campo extends Activity {
 						
 						final LinearLayout fill2=(LinearLayout)layoutInflater.inflate(R.layout.layout_per_nave, null);
 						naveDaDue=new Nave(2);
+						
 						naveAttiva=false;
 						nave_2.setClickable(false);
 						naveDaDue.settaNave(position);
+						try{
+						
+						}catch(Exception e){}
 						nomeNave=(TextView)fill2.getChildAt(0);
 						nomeNave.setText(naveDaDue.getPosizioni());
 						layout.addView(fill2, 1);
@@ -123,6 +144,7 @@ public class Campo extends Activity {
 						naveAttiva=false;
 						nave_3.setClickable(false);
 						naveDaTre.settaNave(position);
+						
 						nomeNave=(TextView)fill3.getChildAt(0);
 						nomeNave.setText(naveDaTre.getPosizioni());
 						layout.addView(fill3, 1);
@@ -207,12 +229,22 @@ public class Campo extends Activity {
 	public void runMatch(){
 		Intent Match=new Intent(this, Match_Enemy.class);
 		Intent MyField=new Intent(this, My_Field.class);
-		toolBox.enemy_field=new boolean[100];
 		toolBox.campoVirtuale=new boolean[100];
 		toolBox.colpite=new boolean[100];
 		toolBox.campoVirtuale[0]=true;
-		toolBox.my_field=pres;
 		toolBox.mancato_enemy=new boolean[100];
+		toolBox.state_enemy_field=new boolean[100];
+		
+		byte[] sendField = new byte[101];
+		for (int i = 1; i < pres.length; i++) {
+			if (pres[i - 1] == true) {
+				sendField[i] = 1;
+			} else {
+				sendField[i] = 0;
+			}
+		}
+		sendField[0] = ID_MSG_ENEMY_FIELD;
+		toolBox.mBlueBattleshipService.write(sendField);
 		if(toolBox.primo) startActivity(Match);
 		else startActivity(MyField);
 	}
@@ -258,10 +290,66 @@ public class Campo extends Activity {
 			public View getView(int position, View convertView, ViewGroup parent) {
 				res=getResources();
 				drawable = res.getDrawable(R.drawable.grey);
+				Drawable blue = getResources().getDrawable(R.drawable.vuoto);
+				nave1=getResources().getDrawable(R.drawable.nave_1);
+				nave2a=getResources().getDrawable(R.drawable.nave_2_a);
+				nave2b=getResources().getDrawable(R.drawable.nave_2_b);
+				nave3a=getResources().getDrawable(R.drawable.nave_3_a);
+				nave3b=getResources().getDrawable(R.drawable.nave_3_b);
+				nave3c=getResources().getDrawable(R.drawable.nave_3_c);
+				nave2av=getResources().getDrawable(R.drawable.nave_2_a_v);
+				nave2bv=getResources().getDrawable(R.drawable.nave_2_b_v);
+				nave3av=getResources().getDrawable(R.drawable.nave_3_a_v);
+				nave3bv=getResources().getDrawable(R.drawable.nave_3_b_v);
+				nave3cv=getResources().getDrawable(R.drawable.nave_3_c_v);
+				//Drawable grey = getResources().getDrawable(R.drawable.grey);
 				SquareImageView siv=new SquareImageView(context,pixelW);
-				Drawable blue = getResources().getDrawable(R.drawable.blue);
-				Drawable grey = getResources().getDrawable(R.drawable.grey);
-		       if(pres[position]) siv.setImageDrawable(grey);
+		       if(pres[position]) {
+		    	   switch (shipType[position]){
+		    	   case 1:
+		    		   siv.setImageDrawable(nave1);
+		    		   break;
+		    	   case 21:
+		    		   
+		    		   siv.setImageDrawable(nave2a);
+		    		   
+		    		   break;
+		    	   case 22:
+		    		   
+			    		   siv.setImageDrawable(nave2b);
+			    		    
+		    		   break;
+		    	   case 23:
+		    		   siv.setImageDrawable(nave2av);
+		    		   break;
+		    	   case 24:
+		    		   siv.setImageDrawable(nave2bv);
+		    		   break;
+		    	   case 30:
+			    		   siv.setImageDrawable(nave3a);
+			    		   
+		    		   break;
+		    	   case 31:
+		    		   
+			    		   siv.setImageDrawable(nave3b);
+			    		    
+		    		   break;
+		    	   case 32:
+		    		  
+			    		   siv.setImageDrawable(nave3c);
+			    		   
+		    		   break;
+		    	   case 33:
+		    		   siv.setImageDrawable(nave3av);
+		    		   break;
+		    	   case 34:
+		    		   siv.setImageDrawable(nave3bv);
+		    		   break;
+		    	   case 35:
+		    		   siv.setImageDrawable(nave3cv);
+		    		   break;
+		    	   }
+		       }
 		       else siv.setImageDrawable(blue);
 				return siv;
 			}
@@ -373,6 +461,7 @@ public class Campo extends Activity {
 						if(checkFree(position,grandezza)){
 						pres[position]=true;
 						posizioni[0]=position;
+						shipType[position]=1;
 						adapter.notifyDataSetChanged();
 						nave_1.setChecked(false);
 						}
@@ -382,8 +471,10 @@ public class Campo extends Activity {
 							if((position/10)==((position+1)/10) && checkFree(position, grandezza)){
 							pres[position]=true;
 							posizioni[0]=position;
+							shipType[position]=21;
 							pres[position+1]=true;
 							posizioni[1]=position+1;
+							shipType[position+1]=22;
 							}else {
 								throw new Exception();
 							}
@@ -391,11 +482,14 @@ public class Campo extends Activity {
 						else {
 							if(checkFree(position, grandezza)){
 							try{
+								
 							pres[position-10]=true;
 							posizioni[0]=position-10;
+							shipType[position-10]=23;
 							}catch(Exception e){break;}
 							
 							pres[position]=true;
+							shipType[position]=24;
 							posizioni[1]=position;
 							}else throw new Exception();
 						}
@@ -412,6 +506,9 @@ public class Campo extends Activity {
 							pres[1+position]=true;
 							posizioni[2]=position-1;
 							pres[position-1]=true;
+							shipType[position]=31;
+							shipType[position +1]=32;
+							shipType[position-1]=30;
 							}else {
 								throw new Exception();
 							}
@@ -422,20 +519,24 @@ public class Campo extends Activity {
 							try{
 							pres[position-10]=true;
 							posizioni[2]=position-10;
+							shipType[position-10]=33;
 							}catch(Exception e ){
 								break;
 							}
 							try{
 							pres[position+10]=true;
 							posizioni[1]=position+10;
+							shipType[position+10]=35;
 							}
 							catch(Exception e){
 								
 								pres[position-10]=false;
 								posizioni[2]=-1;
+								shipType[position-10]=33;
 								break;}
 							pres[position]=true;
 							posizioni[0]=position;
+							shipType[position]=34;
 							}else throw new Exception();
 							
 							}
