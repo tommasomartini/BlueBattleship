@@ -13,12 +13,6 @@
         android:layout_height="wrap_content"
         android:text="@string/bt_search_bt_devices" />
 
-    <Button
-        android:id="@+id/startCampo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
     <TextView
         android:id="@+id/vvv2"
         android:layout_width="wrap_content"

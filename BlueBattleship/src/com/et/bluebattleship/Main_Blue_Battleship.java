@@ -215,13 +215,13 @@ public class Main_Blue_Battleship extends Activity {
 		//btSend = (Button)findViewById(R.id.btSend);
 
 		//vado al campo
-		Button Campo=(Button)findViewById(R.id.startCampo);
-		Campo.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				runCampo();	
-			}
-		});
+//		Button Campo=(Button)findViewById(R.id.startCampo);
+//		Campo.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				runCampo();	
+//			}
+//		});
 
 //		btActBT.setOnClickListener(new OnClickListener(){
 //			@Override
